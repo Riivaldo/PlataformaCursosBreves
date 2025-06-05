@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Profesor, Curso, Inscripcion, Recurso, Progreso
+    # ---- REGISTRO DE LOS MODELOS EN EL ADMIN ----
 # Register your models here.
 admin.site.register(Profesor)
 admin.site.register(Curso)

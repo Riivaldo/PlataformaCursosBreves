@@ -1,69 +1,59 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Curso, Inscripcion, Recurso, Progreso
-from .forms import InscripcionForm, RecursoForm
+from .forms import InscripcionForm
 from django.http import HttpResponseForbidden
 from datetime import date
 from .models import Curso
+from django.shortcuts import render, get_object_or_404
+from .models import Curso
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+# Lista de los cursos en la pagina principal
 def lista_cursos(request):
     cursos = Curso.objects.all()
     return render(request, 'cursos/cursos.html', {'cursos': cursos})
 
 
-def InscripcionACursos(request, curso_id):
-    curso = get_object_or_404(Curso, pk=curso_id)
-    
+# muesta a detalles las fehas de inicio y fin como tambien los usuarios inscritos en cada curso
+
+def detalle_curso(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    inscripciones = Inscripcion.objects.filter(curso=curso)
+    return render(request, 'cursos/detalle_Cursos.html', {
+        'curso': curso,
+        'inscripciones': inscripciones
+    })
+# PRIMER FUNCIONALIDAD IMPLEMENTADA
+# Inscripción de un usuario a un curso
+# requiriendo el login del usuario
+@login_required
+def inscribirse_curso(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    user = request.user
+
     if request.method == 'POST':
         form = InscripcionForm(request.POST)
         if form.is_valid():
-            inscripcion = form.save(commit=False)
-            inscripcion.curso = curso
-            inscripcion.save()
+            inscripcion, created = Inscripcion.objects.get_or_create(
+                user=user,
+                curso=curso,
+                defaults={
+                    'nombre_estudiante': form.cleaned_data['nombre_estudiante'],
+                    'email_estudiante': form.cleaned_data['email_estudiante'],
+                }
+            )
+            if not created:
+                # Si ya existe manda este mensaje de error
+                form.add_error(None, 'Ya estás inscrito en este curso.')
             return redirect('detalle_curso', curso_id=curso.id)
     else:
-        form = InscripcionForm()
-    
-    return render(request, 'cursos/inscripcion.html', {'form': form, 'curso': curso})
+        form = InscripcionForm(initial={
+            'nombre_estudiante': user.get_full_name() or user.username,
+            'email_estudiante': user.email
+        })
 
-def SubidaDeMaterias(request, curso_id):
-    curso = get_object_or_404(Curso, pk=curso_id)
-
-    if request.method == 'POST':
-        form = RecursoForm(request.POST)
-        if form.is_valid():
-            recurso = form.save(commit=False)
-            recurso.curso = curso
-            recurso.save()
-            return redirect('detalle_curso', curso_id=curso.id)
-    else:
-        form = RecursoForm()
-
-    return render(request, 'cursos/subir_materia.html', {'form': form, 'curso': curso})
-
-def ProgresoDelEstudiante(request, inscripcion_id):
-    inscripcion = get_object_or_404(Inscripcion, pk=inscripcion_id)
-    curso = inscripcion.curso
-    recursos = Recurso.objects.filter(curso=curso)
-    progreso_existente = {p.recurso.id: p for p in Progreso.objects.filter(inscripcion=inscripcion)}
-
-    if request.method == 'POST':
-        recurso_id = request.POST.get('recurso_id')
-        completado = request.POST.get('completado') == 'on'
-        recurso = get_object_or_404(Recurso, pk=recurso_id)
-
-        progreso, creado = Progreso.objects.get_or_create(inscripcion=inscripcion, recurso=recurso)
-        progreso.completado = completado
-        progreso.fecha_completado = date.today() if completado else None
-        progreso.save()
-
-        return redirect('progreso_estudiante', inscripcion_id=inscripcion_id)
-
-    contexto = {
-        'inscripcion': inscripcion,
-        'recursos': recursos,
-        'progreso_existente': progreso_existente,
-    }
-
-    return render(request, 'cursos/progreso_estudiante.html', contexto)
+    return render(request, 'cursos/inscribirse_curso.html', {
+        'curso': curso,
+        'form': form
+    })
