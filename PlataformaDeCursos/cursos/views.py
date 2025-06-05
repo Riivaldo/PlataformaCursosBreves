@@ -3,7 +3,8 @@ from .models import Curso, Inscripcion, Recurso, Progreso
 from .forms import InscripcionForm
 from django.http import HttpResponseForbidden
 from datetime import date
-from .models import Curso
+from .models import Curso , Inscripcion, MaterialExtra
+from .forms import InscripcionForm, MaterialExtraForm
 from django.shortcuts import render, get_object_or_404
 from .models import Curso
 from django.contrib.auth.decorators import login_required
@@ -57,3 +58,17 @@ def inscribirse_curso(request, curso_id):
         'curso': curso,
         'form': form
     })
+#subir material extra a un curso
+@login_required
+def subir_material_extra(request, curso_id):
+    if request.method == 'POST':
+        form = MaterialExtraForm(request.POST, request.FILES)
+        if form.is_valid():
+            material_extra = form.save(commit=False)
+            material_extra.usuario = request.user
+            material_extra.curso_id = curso_id
+            material_extra.save()
+            return redirect('detalle_curso', pk=curso_id)
+    else:
+        form = MaterialExtraForm()
+    return render(request, 'subir_material_extra.html', {'form': form})
