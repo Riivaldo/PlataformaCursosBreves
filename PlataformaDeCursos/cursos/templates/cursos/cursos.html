@@ -1,0 +1,29 @@
+{% extends 'cursos/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <h2 style="text-align: center;">Lista de Cursos</h2>
+    <table border="1" style="margin: auto; width: 80%; text-align: center;">
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Profesor</th>
+            <th>Inicio del curso</th>
+            <th>Fin del curso</th>
+            <th>Inscripciones</th>
+
+        </tr>
+        {% for curso in cursos %}
+        <tr>
+            <td>{{ curso.titulo }} </td>
+            <td>{{ curso.descripcion }}</td>
+            <td>{{ curso.profesor }}</td>
+            <td>{{ curso.fecha_inicio }}</td>
+            <td>{{ curso.fecha_fin }}</td>
+            <td><button style="margin-left: 10px;">Inscribirse</button></td>
+
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
