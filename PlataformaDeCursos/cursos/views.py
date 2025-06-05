@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Curso, Inscripcion, Recurso, Progreso
-from .forms import InscripcionForm
+from .forms import InscripcionForm, RegistroUsuarioForm
 from django.http import HttpResponseForbidden
 from datetime import date
 from .models import Curso
 from django.shortcuts import render, get_object_or_404
 from .models import Curso
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 # Create your views here.
 # Lista de los cursos en la pagina principal
@@ -57,3 +58,15 @@ def inscribirse_curso(request, curso_id):
         'curso': curso,
         'form': form
     })
+
+#  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO
+def registro_usuario(request):
+    if request.method == "POST":
+        form = RegistroUsuarioForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('lista_cursos')
+    else:
+        form = RegistroUsuarioForm()
+    return render(request, "registration/registro.html", {"form": form})
