@@ -51,3 +51,10 @@ class Progreso(models.Model):
 
     def __str__(self):
         return f"{self.inscripcion.nombre_estudiante} - {self.recurso.titulo}"
+ # Modelo para el material extra de los cursos
+class MaterialExtra(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)  # Relaciona el material extra con un curso
+    archivo = models.FileField(upload_to='materiales_extra/')
+    descripcion = models.TextField(blank=True)
+    fecha_subida = models.DateTimeField(auto_now_add=True)
