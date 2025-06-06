@@ -51,3 +51,16 @@ class Progreso(models.Model):
 
     def __str__(self):
         return f"{self.inscripcion.nombre_estudiante} - {self.recurso.titulo}"
+
+# Mantén todos tus modelos existentes y solo modifica ProgresoRecurso
+class ProgresoRecurso(models.Model):
+    inscripcion = models.ForeignKey(Inscripcion, on_delete=models.CASCADE)
+    recurso = models.ForeignKey(Recurso, on_delete=models.CASCADE)
+    completado = models.BooleanField(default=False)
+    fecha_completado = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = ('inscripcion', 'recurso')  # Evita duplicados
+    
+    def __str__(self):
+        return f"{self.inscripcion.user.username if self.inscripcion.user else self.inscripcion.nombre_estudiante} - {self.recurso.titulo}"

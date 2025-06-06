@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mi Progreso en: {{ curso.titulo }}</h2>
+    
+    <div class="progress mb-3">
+        <div class="progress-bar" style="width: {{ porcentaje }}%">
+            {{ porcentaje }}%
+        </div>
+    </div>
+    
+    <p class="mb-4">Has completado {{ completados }} de {{ total }} recursos</p>
+    
+    <div class="list-group">
+        {% for item in progreso_recursos %}
+        <div class="list-group-item {% if item.completado %}list-group-item-success{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>{{ item.recurso.titulo }}</h5>
+                    <small>{{ item.recurso.tipo_archivo }}</small>
+                </div>
+                <div>
+                    {% if item.completado %}
+                        <span class="badge bg-success">Completado</span>
+                        <small class="text-muted">{{ item.fecha|date:"d/m/Y" }}</small>
+                    {% else %}
+                        <a href="{% url 'marcar_completado' item.recurso.id %}" class="btn btn-sm btn-primary">
+                            Marcar como completado
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

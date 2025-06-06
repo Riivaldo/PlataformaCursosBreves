@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Curso, Inscripcion, Recurso, Progreso
+from .models import Curso, Inscripcion, Recurso, ProgresoRecurso
 from .forms import InscripcionForm, RegistroUsuarioForm
 from django.http import HttpResponseForbidden
 from datetime import date
@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Curso
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-
+from django.utils import timezone
 # Create your views here.
 # Lista de los cursos en la pagina principal
 def lista_cursos(request):
@@ -70,3 +70,67 @@ def registro_usuario(request):
     else:
         form = RegistroUsuarioForm()
     return render(request, "registration/registro.html", {"form": form})
+
+
+@login_required
+def ver_progreso(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    
+    # Obtener la inscripción (adaptado a tu modelo actual)
+    try:
+        inscripcion = Inscripcion.objects.get(curso=curso, user=request.user)
+    except Inscripcion.DoesNotExist:
+        return render(request, 'cursos/error.html', {'error': 'No estás inscrito en este curso'})
+    
+    recursos = Recurso.objects.filter(curso=curso).order_by('id')  # Orden simple
+    
+    progreso_data = []
+    completados = 0
+    
+    for recurso in recursos:
+        progreso, created = ProgresoRecurso.objects.get_or_create(
+            inscripcion=inscripcion,
+            recurso=recurso,
+            defaults={'completado': False}
+        )
+        
+        if progreso.completado:
+            completados += 1
+            
+        progreso_data.append({
+            'recurso': recurso,
+            'completado': progreso.completado,
+            'fecha': progreso.fecha_completado
+        })
+    
+    porcentaje = (completados / len(recursos) * 100) if recursos.exists() else 0
+    
+    return render(request, 'cursos/progreso.html', {
+        'curso': curso,
+        'progreso_recursos': progreso_data,
+        'porcentaje': round(porcentaje, 2),
+        'completados': completados,
+        'total': len(recursos)
+    })
+
+@login_required
+def marcar_completado(request, recurso_id):
+    recurso = get_object_or_404(Recurso, id=recurso_id)
+    
+    # Verificar inscripción
+    try:
+        inscripcion = Inscripcion.objects.get(curso=recurso.curso, user=request.user)
+    except Inscripcion.DoesNotExist:
+        return render(request, 'cursos/error.html', {'error': 'No estás inscrito'})
+    
+    # Actualizar progreso
+    progreso, created = ProgresoRecurso.objects.get_or_create(
+        inscripcion=inscripcion,
+        recurso=recurso
+    )
+    
+    progreso.completado = not progreso.completado  # Alternar estado
+    progreso.fecha_completado = timezone.now() if progreso.completado else None
+    progreso.save()
+    
+    return redirect('ver_progreso', curso_id=recurso.curso.id)

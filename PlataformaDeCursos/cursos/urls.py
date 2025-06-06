@@ -10,6 +10,7 @@ urlpatterns = [
     # vista para la inscripción a un curso
     path('curso/<int:curso_id>/inscribirse/', views.inscribirse_curso, name='inscribirse_curso'),
     # vista para el registro de un usuario
-    path('registro/', views.registro_usuario, name='registro_usuario'), 
-
+    path('registro/', views.registro_usuario, name='registro_usuario'),   
+    path('curso/<int:curso_id>/progreso/', views.ver_progreso, name='ver_progreso'),
+    path('recurso/<int:recurso_id>/completar/', views.marcar_completado, name='marcar_completado'),
 ]
