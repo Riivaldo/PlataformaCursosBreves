@@ -13,7 +13,12 @@ urlpatterns = [
     path('registro/', views.registro_usuario, name='registro_usuario'), 
     # vista para subir material extra a un curso
     path('curso/<int:curso_id>/subir_material_extra/', views.subir_material_extra, name='subir_material_extra'),
-
+    # vista del progreso de todos los cursos
+    path('progreso/', views.progreso_estudiante, name='progreso_estudiante'),
+    # vista para ver el recurso
+    path('recurso/<int:recurso_id>/', views.ver_recurso, name='ver_recurso'),
+    # vista para ver el recurso "completar"
+    path('recurso/<int:recurso_id>/completar/', views.marcar_completado, name='marcar_completado'),
 ]
 
 

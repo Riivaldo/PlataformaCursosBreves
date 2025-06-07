@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    {% comment %} VER PROGRESO DEL ESTUDIANTE EN LOS CURSOS {% endcomment %}
     <h1 style="text-align: center; color: blue;">Plataforma de Cursos</h1>
     <div style="text-align: right; margin: 10px 40px 10px 0;">
         {% if user.is_authenticated %}
@@ -19,5 +20,6 @@
         {% endif %}
     </div>
     {% block content %}{% endblock %}
+    
 </body>
 </html>

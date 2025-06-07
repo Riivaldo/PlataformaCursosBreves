@@ -1,0 +1,34 @@
+{% extends 'cursos/base.html' %}
+
+{% block content %}
+<h2>Mi progreso en los cursos</h2>
+
+{% if progreso_por_curso %}
+    {% for curso_id, datos in progreso_por_curso.items %}
+        <div>
+            <h3>{{ datos.curso.titulo }}</h3>
+            <p><strong>Progreso:</strong> {{ datos.porcentaje }}%</p>
+            <p><strong>Recursos completados:</strong> {{ datos.completados }} de {{ datos.total }}</p>
+
+            <ul>
+                {% for recurso in datos.recursos %}
+                    <li>
+                        <a href="{% url 'ver_recurso' recurso.id %}">{{ recurso.titulo }}</a>
+                        {% if recurso.id in datos.completados_ids %}
+                            <span style="color: green;">✅</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <br>
+    {% endfor %}
+
+{% else %}
+    <p>No estás inscrito en ningún curso aún.</p>
+{% endif %}
+
+
+
+<a href="{% url 'lista_cursos' %}"><button>Volver a cursos</button></a>
+{% endblock %}

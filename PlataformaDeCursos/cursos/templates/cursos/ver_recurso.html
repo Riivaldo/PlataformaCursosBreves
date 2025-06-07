@@ -1,0 +1,21 @@
+{% extends 'cursos/base.html' %}
+
+{% block content %}
+  <h2>{{ recurso.titulo }}</h2>
+  <p>{{ recurso.descripcion }}</p>
+
+  {% if recurso.archivo %}
+    <p><a href="{{ recurso.archivo.url }}" download>Descargar archivo</a></p>
+  {% endif %}
+
+  {% if not completado %}
+    <form method="post" action="{% url 'marcar_completado' recurso.id %}">
+      {% csrf_token %}
+      <button type="submit">Marcar como completado</button>
+    </form>
+  {% else %}
+    <p style="color: green;">✅ Ya completaste este recurso</p>
+  {% endif %}
+
+  <a href="{% url 'progreso_estudiante' %}"><button>Volver</button></a>
+{% endblock %}

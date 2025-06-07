@@ -72,7 +72,11 @@ def subir_material_extra(request, curso_id):
             return redirect('detalle_curso', pk=curso_id)
     else:
         form = MaterialExtraForm()
-    return render(request, 'subir_material_extra.html', {'form': form})
+        
+    #Arreglando pequeño error en la urls
+    curso = get_object_or_404(Curso, id=curso_id)
+    return render(request, 'cursos/subir_material_extra.html', {'form': form, 'curso': curso})
+
 
 #  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO
 def registro_usuario(request):
@@ -85,3 +89,72 @@ def registro_usuario(request):
     else:
         form = RegistroUsuarioForm()
     return render(request, "registration/registro.html", {"form": form})
+
+
+# TERCERA FUNCIONALIDAD IMPLEMENTADA
+# progreso del estudiante.
+@login_required
+def progreso_estudiante(request):
+    usuario = request.user
+    inscripciones = Inscripcion.objects.filter(user=usuario)
+
+    progreso_por_curso = {}
+
+    for inscripcion in inscripciones:
+        curso = inscripcion.curso
+        recursos = Recurso.objects.filter(curso=curso)
+        total = recursos.count()
+
+        progresos = Progreso.objects.filter(
+            inscripcion=inscripcion,
+            completado=True
+        )
+        completados_ids = set(progresos.values_list('recurso_id', flat=True))
+        completados_count = len(completados_ids)
+        
+        #calcula el porcentaje del progreso
+        porcentaje = (completados_count / total * 100) if total > 0 else 0
+        progreso_por_curso[curso.id] = {
+            'curso': curso,
+            'porcentaje': round(porcentaje, 2),
+            'total': total,
+            'completados': completados_count,
+            'recursos': recursos,
+            'completados_ids': completados_ids
+        }
+    return render(request, 'cursos/progreso_estudiante.html', {
+        'progreso_por_curso': progreso_por_curso
+    })
+
+
+# Ver un recurso
+@login_required
+def ver_recurso(request, recurso_id):
+    recurso = get_object_or_404(Recurso, id=recurso_id)
+    inscripcion = Inscripcion.objects.filter(user=request.user, curso=recurso.curso).first()
+    if not inscripcion:
+        return HttpResponseForbidden("No estás inscrito en este curso.")
+
+    progreso = Progreso.objects.filter(inscripcion=inscripcion, recurso=recurso).first()
+    
+    completado = progreso.completado if progreso else False
+    return render(request, 'cursos/ver_recurso.html', {
+        'recurso': recurso,
+        'completado': completado
+    })
+
+# Marcar como completado el recurso visto por el estudiante.
+@login_required
+def marcar_completado(request, recurso_id):
+    recurso = get_object_or_404(Recurso, id=recurso_id)
+    inscripcion = Inscripcion.objects.filter(user=request.user, curso=recurso.curso).first()
+    if not inscripcion:
+        return HttpResponseForbidden("No estás inscrito en este curso.")
+
+    progreso, _ = Progreso.objects.get_or_create(inscripcion=inscripcion, recurso=recurso)
+    progreso.completado = True
+    progreso.fecha_completado = date.today()
+    progreso.save()
+
+    return redirect('ver_recurso', recurso_id=recurso.id)
+

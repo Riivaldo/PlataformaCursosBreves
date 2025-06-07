@@ -1,6 +1,5 @@
 {% extends 'cursos/base.html' %}
 
-
 {% comment %} # muesra eL detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
 
 {% block content %}
@@ -23,6 +22,15 @@
             <li>No hay usuarios inscritos.</li>
         {% endfor %}
     </ul>
+
+    {% comment %} Boton para subir un material extra (no esta restringido para administradores)
+    {% if user.is_authenticated %}
+    <a href="{% url 'subir_material_extra' curso.id %}">
+        <button style="margin-bottom: 20px;">Subir Material Extra</button>
+    </a>
+    {% endif %}
+    {% endcomment %}
+
     {% if user.is_authenticated %}
         <form method="post" action="{% url 'inscribirse_curso' curso.id %}">
             {% csrf_token %}
