@@ -23,21 +23,20 @@
         {% endfor %}
     </ul>
 
-    {% comment %} Boton para subir un material extra (no esta restringido para administradores)
-    {% if user.is_authenticated %}
-    <a href="{% url 'subir_material_extra' curso.id %}">
-        <button style="margin-bottom: 20px;">Subir Material Extra</button>
-    </a>
-    {% endif %}
-    {% endcomment %}
-
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and not es_profesor %}
         <form method="post" action="{% url 'inscribirse_curso' curso.id %}">
             {% csrf_token %}
             <button type="submit">Inscribirse</button>
         </form>
-    {% else %}
+    {% elif not user.is_authenticated %}
         <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para inscribirte.</p>
     {% endif %}
-    <a href="{% url 'lista_cursos' %}"><button>Volver</button></a>
+    
+    {% comment %} Verificacion para profesor {% endcomment %}
+    {% if es_profesor %}
+        <a href="{% url 'dashboard' %}"><button>Volver</button></a>
+    {% else %}
+        <a href="{% url 'lista_cursos' %}"><button>Volver</button></a>
+    {% endif %}
+
 {% endblock %}

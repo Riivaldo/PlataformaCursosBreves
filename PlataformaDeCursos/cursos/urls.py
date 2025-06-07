@@ -1,4 +1,5 @@
 from django.urls import path
+from cursos.views import login_redirect
 from . import views
 
 urlpatterns = [
@@ -19,6 +20,10 @@ urlpatterns = [
     path('recurso/<int:recurso_id>/', views.ver_recurso, name='ver_recurso'),
     # vista para ver el recurso "completar"
     path('recurso/<int:recurso_id>/completar/', views.marcar_completado, name='marcar_completado'),
+    # vista para ver el maestro"
+    path('dashboard/', views.dashboard, name='dashboard'),
+    # vista para la redireccion entre estudiante y maestro"
+    path('redireccion/', login_redirect, name='login_redirect'),
 ]
 
 

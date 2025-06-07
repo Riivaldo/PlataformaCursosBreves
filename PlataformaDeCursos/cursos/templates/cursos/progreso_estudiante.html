@@ -1,5 +1,7 @@
 {% extends 'cursos/base.html' %}
 
+{% comment %} # Vista para el progreso del estudiante (en las materias inscritas) {% endcomment %}
+
 {% block content %}
 <h2>Mi progreso en los cursos</h2>
 
@@ -9,7 +11,6 @@
             <h3>{{ datos.curso.titulo }}</h3>
             <p><strong>Progreso:</strong> {{ datos.porcentaje }}%</p>
             <p><strong>Recursos completados:</strong> {{ datos.completados }} de {{ datos.total }}</p>
-
             <ul>
                 {% for recurso in datos.recursos %}
                     <li>
