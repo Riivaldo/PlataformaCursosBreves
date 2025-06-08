@@ -1,0 +1,60 @@
+/*Paleta de colores de la pagina*/
+:root {
+  --color-primario: #eeeeee;
+  --color-secundario:#4977da;
+  --color-tablas:#224bbe;
+  --color-hoverbtn:#5cb6ee;
+}
+
+body {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  margin: 0px;
+  height: 100vh;
+  width: auto;
+  padding: 0px;
+  background-color: var(--color-primario);
+}
+button{
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  border: 0px;
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  padding: 0.5rem;
+}
+
+button:hover{
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.6rem;
+  background-color: var(--color-hoverbtn);
+}
+
+.header{
+  margin: 0px;
+  padding: 0.1rem;
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+}
+.contenido{
+  border: 1px dotted var(--color-secundario);
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0.5rem;
+  border-radius: 12px;
+}
+
+.tabla{
+  border: 2px solid var(--color-tablas);
+  border-collapse: collapse;
+}
+th, td {
+  border: 2px dotted var(--color-tablas);
+  padding: 0.5rem 0.2rem;
+}
+th {
+  color: var(--color-secundario);
+  border: 2px solid var(--color-tablas);
+}

@@ -1,16 +1,31 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Curso, Inscripcion, Recurso, Progreso
+from .models import Curso, Inscripcion, MaterialExtra, Recurso, Progreso
+from .forms import InscripcionForm, RegistroUsuarioForm, MaterialExtraForm
 from .forms import InscripcionForm, RegistroUsuarioForm
 from django.http import HttpResponseForbidden
 from datetime import date
-from .models import Curso , Inscripcion, MaterialExtra
-from .forms import InscripcionForm, MaterialExtraForm
 from django.shortcuts import render, get_object_or_404
-from .models import Curso
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 
 # Create your views here.
+# Verifica si el usuario tiene asociado un profesor para inicio de Sesion y redirecciones
+@login_required
+def login_redirect(request):
+    if hasattr(request.user, 'profesor'):
+        return redirect('dashboard')
+    else:
+        return redirect('lista_cursos')
+
+@login_required
+def dashboard(request):
+    if hasattr(request.user, 'profesor'):
+        profesor = request.user.profesor
+        cursos = Curso.objects.filter(profesor=profesor)
+        return render(request, 'cursos/dashboard_profesor.html', {'cursos': cursos})
+    else:
+        return redirect('cursos/cursos.html') 
+    
 # Lista de los cursos en la pagina principal
 def lista_cursos(request):
     cursos = Curso.objects.all()
@@ -19,13 +34,18 @@ def lista_cursos(request):
 
 # muesta a detalles las fehas de inicio y fin como tambien los usuarios inscritos en cada curso
 
+@login_required
 def detalle_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
     inscripciones = Inscripcion.objects.filter(curso=curso)
+    es_profesor = hasattr(request.user, 'profesor')  # <-- NUEVA LÍNEA
+
     return render(request, 'cursos/detalle_Cursos.html', {
         'curso': curso,
-        'inscripciones': inscripciones
+        'inscripciones': inscripciones,
+        'es_profesor': es_profesor 
     })
+
 # PRIMER FUNCIONALIDAD IMPLEMENTADA
 # Inscripción de un usuario a un curso
 # requiriendo el login del usuario
@@ -59,7 +79,11 @@ def inscribirse_curso(request, curso_id):
         'curso': curso,
         'form': form
     })
-#subir material extra a un curso
+    
+# SEGUNDA FUNCIONALIDAD IMPLEMENTADA
+# SUBIR UN MATERIAL EXTRA
+# requiriendo el loggin solo del maestro encargado de la materia
+
 @login_required
 def subir_material_extra(request, curso_id):
     if request.method == 'POST':
@@ -69,12 +93,16 @@ def subir_material_extra(request, curso_id):
             material_extra.usuario = request.user
             material_extra.curso_id = curso_id
             material_extra.save()
-            return redirect('detalle_curso', pk=curso_id)
+            return redirect('detalle_curso', curso_id=curso_id)
     else:
         form = MaterialExtraForm()
-    return render(request, 'subir_material_extra.html', {'form': form})
+        
+    #Arreglando pequeño error en la urls
+    curso = get_object_or_404(Curso, id=curso_id)
+    return render(request, 'cursos/subir_material_extra.html', {'form': form, 'curso': curso})
 
-#  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO
+
+#  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO (evitar al maestro) 
 def registro_usuario(request):
     if request.method == "POST":
         form = RegistroUsuarioForm(request.POST)
@@ -85,3 +113,63 @@ def registro_usuario(request):
     else:
         form = RegistroUsuarioForm()
     return render(request, "registration/registro.html", {"form": form})
+
+
+# TERCERA FUNCIONALIDAD IMPLEMENTADA
+# progreso del estudiante.
+# permite al estudiante completar recursos de materias inscritas y verlos en tiempo real
+@login_required
+def progreso_estudiante(request):
+    usuario = request.user
+    inscripciones = Inscripcion.objects.filter(user=usuario)
+    
+    progresos = Progreso.objects.filter(inscripcion__in=inscripciones).select_related('recurso', 'inscripcion', 'inscripcion__curso')
+
+    progreso_por_curso = {}
+    for inscripcion in inscripciones:
+        recursos = Recurso.objects.filter(curso=inscripcion.curso)
+        completados = progresos.filter(inscripcion=inscripcion, completado=True).count()
+        total = recursos.count()
+        porcentaje = (completados / total * 100) if total > 0 else 0
+        progreso_por_curso[inscripcion.curso] = {
+            'porcentaje': round(porcentaje, 2),
+            'total': total,
+            'completados': completados,
+            'recursos': recursos
+        }
+
+    return render(request, 'cursos/progreso_estudiante.html', {
+        'progreso_por_curso': progreso_por_curso
+    })
+
+# Ver un recurso ya creado
+@login_required
+def ver_recurso(request, recurso_id):
+    recurso = get_object_or_404(Recurso, id=recurso_id)
+    inscripcion = Inscripcion.objects.filter(user=request.user, curso=recurso.curso).first()
+    if not inscripcion:
+        return HttpResponseForbidden("No estás inscrito en este curso.")
+
+    progreso = Progreso.objects.filter(inscripcion=inscripcion, recurso=recurso).first()
+    
+    completado = progreso.completado if progreso else False
+    return render(request, 'cursos/ver_recurso.html', {
+        'recurso': recurso,
+        'completado': completado
+    })
+
+# Marcar como completado el recurso visto por el estudiante.
+@login_required
+def marcar_completado(request, recurso_id):
+    recurso = get_object_or_404(Recurso, id=recurso_id)
+    inscripcion = Inscripcion.objects.filter(user=request.user, curso=recurso.curso).first()
+    if not inscripcion:
+        return HttpResponseForbidden("No estás inscrito en este curso.")
+
+    progreso, _ = Progreso.objects.get_or_create(inscripcion=inscripcion, recurso=recurso)
+    progreso.completado = True
+    progreso.fecha_completado = date.today()
+    progreso.save()
+
+    return redirect('ver_recurso', recurso_id=recurso.id)
+

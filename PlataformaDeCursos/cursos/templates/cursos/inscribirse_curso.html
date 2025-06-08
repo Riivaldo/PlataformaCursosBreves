@@ -1,7 +1,11 @@
 
 {% extends 'cursos/base.html' %}
-{% comment %} PLANTILLA PARA LA INSCRIPCIÓN A UN CURSO {% endcomment %}
 
+{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
+
+{% block title %} Inscripcion | Curso {% endblock %}
+
+{% comment %} PLANTILLA PARA LA INSCRIPCIÓN A UN CURSO {% endcomment %}
 
 {% block content %}
 <h2>Inscribirse al curso: {{ curso.titulo }}</h2>

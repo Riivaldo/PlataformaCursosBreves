@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1 style="text-align: center; color: blue;">Plataforma de Cursos</h1>
-    <div style="text-align: right; margin: 10px 40px 10px 0;">
-        {% if user.is_authenticated %}
-            Bienvenido, {{ user.username }} |
-            <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Cerrar sesión</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}">Iniciar sesión</a>
-        {% endif %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% load static%}
+    <link rel="stylesheet" href="{% static 'css/estilos_generales.css' %}">
+    <title>{% block title %}Plataforma Cursos{% endblock %}</title>
+</title>
+  </head>
+  <body>
+    {% comment %} VER PROGRESO DEL ESTUDIANTE EN LOS CURSOS {% endcomment %}
+    <div class="header">
+      <h1 style="text-align: center;">Plataforma de Cursos</h1>
     </div>
-    {% block content %}{% endblock %}
-</body>
+    
+    <div class="logged" style="text-align: right; margin: 10px 40px 10px 0">
+      {% if user.is_authenticated %} Bienvenido, {{ user.username }} |
+      <form action="{% url 'logout' %}" method="post" style="display: inline">
+        {% csrf_token %}
+        <button
+          type="submit"
+          style="background: none; border: none; color: blue; cursor: pointer"
+        >
+          Cerrar sesión
+        </button>
+      </form>
+      {% else %}
+      <a href="{% url 'login' %}">Iniciar sesión</a>
+      {% endif %}
+    </div>
+
+    <div class="contenido">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
 </html>
