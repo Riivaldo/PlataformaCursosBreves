@@ -1,5 +1,8 @@
 {% extends 'cursos/base.html' %}
 
+{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
+
+{% block title %} Cursos {% endblock %}
 
 {% comment %} # muesra eL detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
 
@@ -23,13 +26,21 @@
             <li>No hay usuarios inscritos.</li>
         {% endfor %}
     </ul>
-    {% if user.is_authenticated %}
+
+    {% if user.is_authenticated and not es_profesor %}
         <form method="post" action="{% url 'inscribirse_curso' curso.id %}">
             {% csrf_token %}
             <button type="submit">Inscribirse</button>
         </form>
-    {% else %}
+    {% elif not user.is_authenticated %}
         <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para inscribirte.</p>
     {% endif %}
-    <a href="{% url 'lista_cursos' %}"><button>Volver</button></a>
+    
+    {% comment %} Verificacion para profesor {% endcomment %}
+    {% if es_profesor %}
+        <a href="{% url 'dashboard' %}"><button>Volver</button></a>
+    {% else %}
+        <a href="{% url 'lista_cursos' %}"><button>Volver</button></a>
+    {% endif %}
+
 {% endblock %}

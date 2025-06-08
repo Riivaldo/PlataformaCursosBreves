@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Profesor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE) #Relacion de usuario para que el maestro tenga una sesion igual al estudiante
     nombre = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     especialidad = models.CharField(max_length=100)
@@ -24,7 +25,7 @@ class Curso(models.Model):
         return self.titulo
 
 class Inscripcion(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Permite nulos de manera temporal para trabajar de manera mas rapida 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) 
     nombre_estudiante = models.CharField(max_length=100)
     email_estudiante = models.EmailField()
     fecha_inscripcion = models.DateField(auto_now_add=True)
@@ -51,6 +52,7 @@ class Progreso(models.Model):
 
     def __str__(self):
         return f"{self.inscripcion.nombre_estudiante} - {self.recurso.titulo}"
+
  # Modelo para el material extra de los cursos
 class MaterialExtra(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,7 +1,10 @@
 {% extends 'cursos/base.html' %}
 
+{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
 
-{% comment %} # muesra eL detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
+{% block title %} Subir Material {% endblock %}
+
+{% comment %} # muesra el detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
 
 {% block content %}
 <h2>Subir Material Extra para el Curso: {{ curso.titulo }}</h2>
