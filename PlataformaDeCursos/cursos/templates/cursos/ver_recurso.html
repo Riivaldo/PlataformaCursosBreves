@@ -1,0 +1,29 @@
+{% extends 'cursos/base.html' %}
+
+{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
+
+{% block title %} Detalles Material {% endblock %}
+
+{% comment %} # Muesta los detalles del recurso de la materia, para ser completadas por el estudiante y marcadas{% endcomment %}
+{% block content %}
+<div class="recurso-detalle">
+  <h2>{{ recurso.titulo }}</h2>
+  <p>{{ recurso.descripcion }}</p>
+
+  {% if recurso.archivo %}
+    <p><a href="{{ recurso.archivo.url }}" download>📄 Descargar archivo</a></p>
+  {% endif %}
+
+  {% if not completado %}
+    <form method="post" action="{% url 'marcar_completado' recurso.id %}">
+      {% csrf_token %}
+      <button type="submit">Marcar como completado</button>
+    </form>
+  {% else %}
+    <p class="estado-completado">✅ Ya completaste este recurso</p>
+  {% endif %}
+
+  <a href="{% url 'progreso_estudiante' %}"><button>Volver</button></a>
+</div>
+
+{% endblock %}

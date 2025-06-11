@@ -1,0 +1,51 @@
+{% extends 'cursos/base.html' %}
+
+{% block title %} Panel Profesor {% endblock %}
+
+{% block content %}
+<h2 class="centrado">Panel del Profesor</h2>
+
+{% for item in cursos_con_inscripciones %}
+    <h3>Curso: {{ item.curso.titulo }}</h3>
+    <p><strong>Descripción:</strong> {{ item.curso.descripcion }}</p>
+
+    <h4>Estudiantes inscritos:</h4>
+    {% if item.estudiantes %}
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Progreso (%)</th>
+                    <th>Recursos completados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for estudiante in item.estudiantes %}
+                    <tr>
+                        <td>
+                            {% if estudiante.inscripcion.user %}
+                                {{ estudiante.inscripcion.user.get_full_name|default:estudiante.inscripcion.user.username }}
+                            {% else %}
+                                {{ estudiante.inscripcion.nombre_estudiante }}
+                            {% endif %}
+                        </td>
+                        <td>{{ estudiante.inscripcion.email_estudiante }}</td>
+                        <td>{{ estudiante.progreso }}</td>
+                        <td>{{ estudiante.completados }} / {{ estudiante.total_recursos }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay estudiantes inscritos.</p>
+    {% endif %}
+    <hr>
+    <li>
+        <a href="{% url 'subir_material_extra' item.curso.id %}">📁 Subir Material Extra</a>
+    </li>
+{% empty %}
+    <p>No tienes cursos asignados.</p>
+{% endfor %}
+
+{% endblock %}
