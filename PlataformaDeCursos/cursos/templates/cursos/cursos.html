@@ -1,20 +1,11 @@
 {% extends 'cursos/base.html' %} {% load static %} {% block content %}
 
-{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
-
-{% block title %} Cursos {% endblock %}
-
 {% comment %} LISTA TODOS LOS CURSOS DISPONIBLES EN LA PLATAFORMA {% endcomment %}
 
 {% load static %}
 
-{% comment %} VER PROGRESO DEL ESTUDIANTE EN LOS CURSOS {% endcomment %}
-  {% if user.is_authenticated %}
-    <a href="{% url 'progreso_estudiante' %}">Ver mi progreso</a>
-  {% endif %}
-
-<h2 style="text-align: center">Lista de Cursos</h2>
-<table class="tabla" border="1" style="margin: auto; width: 90%; text-align: center">
+<h2 class="centrado">Lista de Cursos</h2>
+<table class="tabla">
   <tr>
     <th>Nombre</th>
     <th>Descripción</th>
@@ -29,7 +20,7 @@
     <td>{{ curso.profesor }}</td>
     <td>
       <a href="{% url 'detalle_curso' curso.id %}">
-        <button style="margin-left: 10px">Detalles</button>
+        <button>Detalles</button>
       </a>
     </td>
     <td>
