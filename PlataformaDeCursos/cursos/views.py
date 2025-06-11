@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Curso, Inscripcion, MaterialExtra, Recurso, Progreso
+from .models import Profesor, Curso, Inscripcion, MaterialExtra, Recurso, Progreso
 from .forms import InscripcionForm, RegistroUsuarioForm, MaterialExtraForm
 from .forms import InscripcionForm, RegistroUsuarioForm
 from django.http import HttpResponseForbidden
@@ -84,22 +84,39 @@ def inscribirse_curso(request, curso_id):
 # SUBIR UN MATERIAL EXTRA
 # requiriendo el loggin solo del maestro encargado de la materia
 
-@login_required
 def subir_material_extra(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    
     if request.method == 'POST':
         form = MaterialExtraForm(request.POST, request.FILES)
         if form.is_valid():
-            material_extra = form.save(commit=False)
-            material_extra.usuario = request.user
-            material_extra.curso_id = curso_id
-            material_extra.save()
-            return redirect('detalle_curso', curso_id=curso_id)
+            material = form.save(commit=False)
+            material.curso = curso
+            material.profesor = Profesor.objects.get(user=request.user)
+            material.save()
+
+            # 🔥 Crear Recurso automáticamente
+            Recurso.objects.create(
+                titulo=material.titulo,
+                descripcion=material.descripcion,
+                tipo_archivo="Archivo",
+                enlace=material.archivo.url,
+                curso=curso
+            )
+
+            return redirect('subir_material_extra', curso_id=curso.id)
     else:
         form = MaterialExtraForm()
-        
-    #Arreglando pequeño error en la urls
-    curso = get_object_or_404(Curso, id=curso_id)
-    return render(request, 'cursos/subir_material_extra.html', {'form': form, 'curso': curso})
+
+    material_extra = MaterialExtra.objects.filter(curso=curso)
+
+    return render(request, 'cursos/subir_material_extra.html', {
+        'curso': curso,
+        'form': form,
+        'material_extra': material_extra,
+    })
+
+
 
 
 #  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO (evitar al maestro) 
@@ -131,13 +148,14 @@ def progreso_estudiante(request):
         completados = progresos.filter(inscripcion=inscripcion, completado=True).count()
         total = recursos.count()
         porcentaje = (completados / total * 100) if total > 0 else 0
-        progreso_por_curso[inscripcion.curso] = {
+        progreso_por_curso[inscripcion.curso.id] = {
+            'curso': inscripcion.curso,
             'porcentaje': round(porcentaje, 2),
             'total': total,
             'completados': completados,
-            'recursos': recursos
+            'recursos': recursos,
+            'completados_ids': list(progresos.filter(inscripcion=inscripcion, completado=True).values_list('recurso_id', flat=True))
         }
-
     return render(request, 'cursos/progreso_estudiante.html', {
         'progreso_por_curso': progreso_por_curso
     })
@@ -173,3 +191,59 @@ def marcar_completado(request, recurso_id):
 
     return redirect('ver_recurso', recurso_id=recurso.id)
 
+# Funciones y vistas para el perfil de usuario (profesor y estudiante)
+    # Esto es para ver si el usuario es un profesor
+    
+def es_profesor(user):
+    return hasattr(user, 'profesor')
+
+def perfil_usuario(request):
+    user = request.user
+
+    if es_profesor(user):
+        profesor = user.profesor
+        cursos = Curso.objects.filter(profesor=profesor)
+
+        return render(request, 'cursos/perfil.html', {
+            'es_profesor':True,
+            'profesor': profesor,
+            'cursos': cursos
+        })
+
+    else:
+        inscripciones = Inscripcion.objects.filter(user=user)
+        cursos_info = []
+        progresos = Progreso.objects.filter(inscripcion__in=inscripciones).select_related('recurso', 'inscripcion', 'inscripcion__curso')
+        
+        for insc in inscripciones:
+            recursos = Recurso.objects.filter(curso=insc.curso)
+            progreso_dict = {
+                p.recurso.id: p.completado
+                for p in Progreso.objects.filter(inscripcion=insc)
+            }
+
+            materiales = []
+            for recurso in recursos:
+                estado = 'completado' if progreso_dict.get(recurso.id) else 'incompleto'
+                materiales.append({
+                    'titulo': recurso.titulo,
+                    'estado': estado,
+                    'id':recurso.id
+                })
+                
+            for inscripcion in inscripciones:
+                recursos = Recurso.objects.filter(curso=inscripcion.curso)
+                completados = progresos.filter(inscripcion=inscripcion, completado=True).count()
+                total = recursos.count()
+                porcentaje = (completados / total * 100) if total > 0 else 0
+
+            cursos_info.append({
+                'titulo_curso': insc.curso.titulo,
+                'materiales': materiales,
+                'porcentaje':porcentaje,
+            })
+
+        return render(request, 'cursos/perfil.html', {
+            'es_profesor':False,
+            'cursos_info': cursos_info
+        })

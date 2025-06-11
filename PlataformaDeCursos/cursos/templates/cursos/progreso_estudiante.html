@@ -11,7 +11,7 @@
 
 {% if progreso_por_curso %}
     {% for curso_id, datos in progreso_por_curso.items %}
-        <div>
+        <div class="card-progreso">
             <h3>{{ datos.curso.titulo }}</h3>
             <p><strong>Progreso:</strong> {{ datos.porcentaje }}%</p>
             <p><strong>Recursos completados:</strong> {{ datos.completados }} de {{ datos.total }}</p>
@@ -32,8 +32,6 @@
 {% else %}
     <p>No estás inscrito en ningún curso aún.</p>
 {% endif %}
-
-
 
 <a href="{% url 'lista_cursos' %}"><button>Volver a cursos</button></a>
 {% endblock %}

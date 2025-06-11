@@ -3,35 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% load static%}
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/estilos_generales.css' %}">
     <title>{% block title %}Plataforma Cursos{% endblock %}</title>
-</title>
   </head>
   <body>
-    {% comment %} VER PROGRESO DEL ESTUDIANTE EN LOS CURSOS {% endcomment %}
-    <div class="header">
-      <h1 style="text-align: center;">Plataforma de Cursos</h1>
-    </div>
-    
-    <div class="logged" style="text-align: right; margin: 10px 40px 10px 0">
-      {% if user.is_authenticated %} Bienvenido, {{ user.username }} |
-      <form action="{% url 'logout' %}" method="post" style="display: inline">
-        {% csrf_token %}
-        <button
-          type="submit"
-          style="background: none; border: none; color: blue; cursor: pointer"
-        >
-          Cerrar sesión
-        </button>
-      </form>
-      {% else %}
-      <a href="{% url 'login' %}">Iniciar sesión</a>
-      {% endif %}
-    </div>
+    <header class="navbar">
+      <div class="navbar-container">
+        <h1 class="logo">Plataforma de Cursos</h1>
+        <nav class="nav-links">
+          <a href="{% url 'lista_cursos' %}">📚 Inicio</a>
+          
+          <a href="{% url 'progreso_estudiante' %}">📈 Ver mi progreso</a>
+          
+          {% if user.is_authenticated %}
+            <a href="{% url 'perfil_usuario' %}">
+              <span class="welcome-text">👤 {{ user.username }}</span>
+            </a>
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+              {% csrf_token %}
+              <button type="submit">Cerrar sesión</button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
 
     <div class="contenido">
       {% block content %}{% endblock %}
     </div>
   </body>
 </html>
+
