@@ -38,13 +38,18 @@ def lista_cursos(request):
 def detalle_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
     inscripciones = Inscripcion.objects.filter(curso=curso)
-    es_profesor = hasattr(request.user, 'profesor')  # <-- NUEVA LÍNEA
+    es_profesor = hasattr(request.user, 'profesor')
+    
+    # verifica si  el usuario inscrito en este curso
+    esta_inscrito = Inscripcion.objects.filter(user=request.user, curso=curso).exists() if request.user.is_authenticated else False
 
     return render(request, 'cursos/detalle_Cursos.html', {
         'curso': curso,
         'inscripciones': inscripciones,
-        'es_profesor': es_profesor 
+        'es_profesor': es_profesor,
+        'esta_inscrito': esta_inscrito
     })
+
 
 # PRIMER FUNCIONALIDAD IMPLEMENTADA
 # Inscripción de un usuario a un curso
@@ -191,4 +196,60 @@ def marcar_completado(request, recurso_id):
 
     return redirect('ver_recurso', recurso_id=recurso.id)
 
+#EXTRAS
+#Darse de baja de curso
+from django.contrib import messages
 
+@login_required
+def darse_de_baja_curso(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    inscripcion = Inscripcion.objects.filter(user=request.user, curso=curso).first()
+
+    if not inscripcion:
+        messages.error(request, "No estás inscrito en este curso.")
+        return redirect('detalle_curso', curso_id=curso.id)
+
+    if request.method == 'POST':
+        inscripcion.delete()
+        messages.success(request, f"Te has dado de baja del curso '{curso.titulo}'.")
+        return redirect('lista_cursos')
+
+    return render(request, 'cursos/confirmar_baja.html', {'curso': curso})
+
+
+
+#maestro vea a sus estudiantes con el progreso
+@login_required
+def dashboard(request):
+    if hasattr(request.user, 'profesor'):
+        profesor = request.user.profesor
+        cursos = Curso.objects.filter(profesor=profesor)
+        cursos_con_inscripciones = []
+
+        for curso in cursos:
+            inscripciones = Inscripcion.objects.filter(curso=curso)
+
+            # Para cada inscripción, obtener progreso de ese estudiante en ese curso
+            estudiantes_con_progreso = []
+            for inscripcion in inscripciones:
+                total_recursos = Recurso.objects.filter(curso=curso).count()
+                completados = Progreso.objects.filter(inscripcion=inscripcion, completado=True).count()
+                porcentaje = (completados / total_recursos * 100) if total_recursos > 0 else 0
+
+                estudiantes_con_progreso.append({
+                    'inscripcion': inscripcion,
+                    'progreso': round(porcentaje, 2),
+                    'total_recursos': total_recursos,
+                    'completados': completados,
+                })
+
+            cursos_con_inscripciones.append({
+                'curso': curso,
+                'estudiantes': estudiantes_con_progreso,
+            })
+
+        return render(request, 'cursos/dashboard_profesor.html', {
+            'cursos_con_inscripciones': cursos_con_inscripciones
+        })
+    else:
+        return redirect('lista_cursos')

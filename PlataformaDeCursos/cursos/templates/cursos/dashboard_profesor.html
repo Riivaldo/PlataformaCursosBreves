@@ -1,22 +1,48 @@
 {% extends 'cursos/base.html' %}
 
-{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
-
-{% block title %} Profesor {% endblock %}
+{% block title %} Panel Profesor {% endblock %}
 
 {% block content %}
-<h2 class="centrado">Panel del Profesor</h2>
-<p>Bienvenido, {{ user.get_full_name|default:user.username }}</p>
+<h2 class="centrado">PANEL DE MATERIA</h2>
 
-<h3>Tus cursos:</h3>
-<ul>
-    {% for curso in cursos %}
-        <li>
-            {{ curso.titulo }} - 
-            <a href="{% url 'subir_material_extra' curso.id %}">Ver detalles</a>
-        </li>
-    {% empty %}
-        <li>No tienes cursos asignados.</li>
-    {% endfor %}
-</ul>
+{% for item in cursos_con_inscripciones %}
+    <h3>Curso: {{ item.curso.titulo }}</h3>
+    <p><strong>Descripción:</strong> {{ item.curso.descripcion }}</p>
+
+    <h4>Estudiantes inscritos:</h4>
+    {% if item.estudiantes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Progreso (%)</th>
+                    <th>Recursos completados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for estudiante in item.estudiantes %}
+                    <tr>
+                        <td>
+                            {% if estudiante.inscripcion.user %}
+                                {{ estudiante.inscripcion.user.get_full_name|default:estudiante.inscripcion.user.username }}
+                            {% else %}
+                                {{ estudiante.inscripcion.nombre_estudiante }}
+                            {% endif %}
+                        </td>
+                        <td>{{ estudiante.inscripcion.email_estudiante }}</td>
+                        <td>{{ estudiante.progreso }}</td>
+                        <td>{{ estudiante.completados }} / {{ estudiante.total_recursos }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay estudiantes inscritos.</p>
+    {% endif %}
+    <hr>
+{% empty %}
+    <p>No tienes cursos asignados.</p>
+{% endfor %}
+
 {% endblock %}
