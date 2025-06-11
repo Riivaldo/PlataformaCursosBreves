@@ -18,7 +18,7 @@
     <div class="perfilCursos">
       <ul>
       {% for curso in cursos %}
-        <li>{{ curso.titulo }}</li>
+        <li>{{ curso.titulo }} - <a href="{% url 'subir_material_extra' curso.id %}">Subir Material</a></li>
       {% endfor %}
       </ul>
     </div>
