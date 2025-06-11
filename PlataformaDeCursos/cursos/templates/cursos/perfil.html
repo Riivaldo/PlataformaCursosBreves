@@ -1,0 +1,79 @@
+{% extends 'cursos/base.html' %}
+
+{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
+
+{% block title %} Perfil {% endblock %}
+
+{% comment %} # muesra eL detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
+
+{% block content %}
+  
+  {% if es_profesor %}
+    <div class="infoPerfil">
+      <h2>Perfil de {{ user.username }}</h2>
+      <h3>Profesor: {{ profesor.nombre }}</h3>
+      <p>Especialidad: {{ profesor.especialidad }}</p>
+    </div>
+    <h4>Cursos que imparte:</h4>
+    <div class="perfilCursos">
+      <ul>
+      {% for curso in cursos %}
+        <li>{{ curso.titulo }} - 
+          <a href="{% url 'subir_material_extra' curso.id %}">Subir Material</a> -
+          <a href="{% url 'dashboard'%}">
+            <button>Más Detalles</button>
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <div class="infoPerfil">
+      <h2>Perfil de {{ user.username }}</h2>
+      <h3>Estudiante</h3>
+    </div>
+    <h2>Mis Cursos</h2>
+    <div class="perfilCursos">
+      {% for curso in cursos_info %}
+        <div class="tarjetaMaterial">
+          <h3>{{ curso.titulo_curso }}</h3>
+          <p>{{curso.porcentaje}}%</p>
+          <strong>
+            <h3>Completados:</h3>
+          </strong>
+          <ul> 
+            {% for material in curso.materiales %}
+              {% if material.estado == "completado"%}
+                <li>
+                  <a href="{% url 'ver_recurso' material.id %}">
+                    {{ material.titulo }}
+                  </a>
+                </li>
+              {% endif%}
+            {% endfor %}
+          </ul>
+          <strong>
+            <h3>No Completados: </h3>
+          </strong>
+          <ul>
+            {% for material in curso.materiales %}
+              {% if material.estado != "completado"%}
+                <li>
+                  <a href="{% url 'ver_recurso' material.id %}">
+                    {{ material.titulo }}
+                  </a>
+                </li>
+              {% endif%}
+            {% endfor %}
+          </ul>
+          <a href="{% url 'progreso_estudiante'%}">
+            <button>Más Detalles</button>
+          </a>
+        </div>
+      {% empty %}
+        <p>No estás inscrito en ningún curso.</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{% endblock %}

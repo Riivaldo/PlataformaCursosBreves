@@ -253,3 +253,59 @@ def dashboard(request):
         })
     else:
         return redirect('lista_cursos')
+
+# Funciones y vistas para el perfil de usuario (profesor y estudiante)
+    # Esto es para ver si el usuario es un profesor
+    
+def es_profesor(user):
+    return hasattr(user, 'profesor')
+
+def perfil_usuario(request):
+    user = request.user
+
+    if es_profesor(user):
+        
+        profesor = user.profesor
+        cursos = Curso.objects.filter(profesor=profesor)
+
+        return render(request, 'cursos/perfil.html', {
+            'es_profesor':True,
+            'profesor': profesor,
+            'cursos': cursos
+        })
+
+    else:
+        inscripciones = Inscripcion.objects.filter(user=user)
+        cursos_info = []
+        progresos = Progreso.objects.filter(inscripcion__in=inscripciones).select_related('recurso', 'inscripcion', 'inscripcion__curso')
+        
+        for insc in inscripciones:
+            recursos = Recurso.objects.filter(curso=insc.curso)
+            progreso_dict = {
+                p.recurso.id: p.completado
+                for p in Progreso.objects.filter(inscripcion=insc)
+            }
+            
+            materiales = []
+            for recurso in recursos:
+                estado = 'completado' if progreso_dict.get(recurso.id) else 'incompleto'
+                materiales.append({
+                    'titulo': recurso.titulo,
+                    'estado': estado,
+                    'id':recurso.id
+                })
+                
+            completados = progresos.filter(inscripcion=insc, completado=True).count()
+            total = recursos.count()
+
+            porcentaje = round((completados / total * 100), 2) if total > 0 else 0
+            cursos_info.append({
+                'titulo_curso': insc.curso.titulo,
+                'materiales': materiales,
+                'porcentaje':porcentaje,
+            })
+
+        return render(request, 'cursos/perfil.html', {
+            'es_profesor':False,
+            'cursos_info': cursos_info
+        })
