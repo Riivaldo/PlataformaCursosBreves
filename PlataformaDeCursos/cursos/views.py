@@ -285,7 +285,7 @@ def perfil_usuario(request):
                 p.recurso.id: p.completado
                 for p in Progreso.objects.filter(inscripcion=insc)
             }
-
+            
             materiales = []
             for recurso in recursos:
                 estado = 'completado' if progreso_dict.get(recurso.id) else 'incompleto'
@@ -295,12 +295,10 @@ def perfil_usuario(request):
                     'id':recurso.id
                 })
                 
-            for inscripcion in inscripciones:
-                recursos = Recurso.objects.filter(curso=inscripcion.curso)
-                completados = progresos.filter(inscripcion=inscripcion, completado=True).count()
-                total = recursos.count()
-                porcentaje = (completados / total * 100) if total > 0 else 0
+            completados = progresos.filter(inscripcion=insc, completado=True).count()
+            total = recursos.count()
 
+            porcentaje = round((completados / total * 100), 2) if total > 0 else 0
             cursos_info.append({
                 'titulo_curso': insc.curso.titulo,
                 'materiales': materiales,
