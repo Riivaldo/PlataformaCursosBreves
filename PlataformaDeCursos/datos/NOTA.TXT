@@ -1,4 +1,4 @@
-pyt******* GUARDAR BASE DE DATOS EN FORMATO JSON ********
+******* GUARDAR BASE DE DATOS EN FORMATO JSON ********
 
  - python manage.py dumpdata > datos/datos.json
 
