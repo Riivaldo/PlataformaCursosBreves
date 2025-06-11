@@ -28,6 +28,10 @@ urlpatterns = [
     path('curso/<int:curso_id>/baja/', views.darse_de_baja_curso, name='darse_de_baja_curso'),
     # vista para perfil de usuario
     path('perfil/', views.perfil_usuario, name='perfil_usuario'),
+    # editar la informacion del usuario
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
+    # cambiar la contraseña del usuario
+    path('cambiar-password/', views.cambio_password, name='cambio_password'),
 ]
 
 

@@ -28,9 +28,17 @@
       </ul>
     </div>
   {% else %}
+
     <div class="infoPerfil">
       <h2>Perfil de {{ user.username }}</h2>
       <h3>Estudiante</h3>
+    </div>
+    <div class="edit_btn">
+      
+        <a href="{% url 'editar_perfil' %}">
+          <button class="btn_editar">Editar información</button>
+        </a>
+
     </div>
     <h2>Mis Cursos</h2>
     <div class="perfilCursos">

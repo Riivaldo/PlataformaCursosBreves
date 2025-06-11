@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profesor, Curso, Inscripcion, MaterialExtra, Recurso, Progreso
 from .forms import InscripcionForm, RegistroUsuarioForm, MaterialExtraForm
-from .forms import InscripcionForm, RegistroUsuarioForm
+from .forms import InscripcionForm, RegistroUsuarioForm, EditarPerfilForm
 from django.http import HttpResponseForbidden
 from datetime import date
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 # Verifica si el usuario tiene asociado un profesor para inicio de Sesion y redirecciones
@@ -309,3 +311,28 @@ def perfil_usuario(request):
             'es_profesor':False,
             'cursos_info': cursos_info
         })
+    
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        form = EditarPerfilForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Perfil del usuario actualizado correctamente!')
+            return redirect('perfil_usuario')
+    else:
+        form = EditarPerfilForm(instance=request.user)
+    return render(request, 'cursos/editar_perfil.html', {'form': form})
+
+@login_required
+def cambio_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, '¡Contraseña cambiada correctamente!')
+            update_session_auth_hash(request, user)  # Mantiene la sesión activa
+            return redirect('perfil_usuario')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'registration/cambio_password.html', {'form': form})

@@ -34,6 +34,27 @@
     <div class="contenido">
       {% block content %}{% endblock %}
     </div>
+    {% comment %} muestra mensajes en el cambio de user y contra {% endcomment %}
+    {% if messages %}
+      <div id="popup-message" class="popup-message {% for message in messages %}{{ message.tags }}{% endfor %}">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        var popup = document.getElementById('popup-message');
+        if (popup) {
+          setTimeout(function() {
+            popup.style.opacity = '0';
+            setTimeout(function() {
+              popup.style.display = 'none';
+            }, 500);
+          }, 3000); 
+        }
+      });
+    </script>
   </body>
 </html>
 

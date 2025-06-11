@@ -21,3 +21,14 @@ class RegistroUsuarioForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
+        
+#   EDITAR INFORMACION DEL USUARIO CAMPOS COMO NAME_USER Y EMAIL
+class EditarPerfilForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        labels = {
+            'username': 'Nombre de usuario',
+            'email': 'Correo electrónico',
+            
+        }
