@@ -23,7 +23,7 @@
     <p class="estado-completado">✅ Ya completaste este recurso</p>
   {% endif %}
 
-  <a href="{% url 'progreso_estudiante' %}"><button>Volver</button></a>
+  <a onclick="history.back()"><button>Volver</button></a>
 </div>
 
 {% endblock %}
