@@ -26,6 +26,7 @@ urlpatterns = [
     path('redireccion/', login_redirect, name='login_redirect'),
     # vista para darse de baja de la materia inscrita
     path('curso/<int:curso_id>/baja/', views.darse_de_baja_curso, name='darse_de_baja_curso'),
+    
 ]
 
 

@@ -3,7 +3,7 @@
 {% block title %} Panel Profesor {% endblock %}
 
 {% block content %}
-<h2 class="centrado">PANEL DE MATERIA</h2>
+<h2 class="centrado">Panel del Profesor</h2>
 
 {% for item in cursos_con_inscripciones %}
     <h3>Curso: {{ item.curso.titulo }}</h3>
@@ -11,7 +11,7 @@
 
     <h4>Estudiantes inscritos:</h4>
     {% if item.estudiantes %}
-        <table>
+        <table border="1" cellpadding="5" cellspacing="0">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -41,6 +41,9 @@
         <p>No hay estudiantes inscritos.</p>
     {% endif %}
     <hr>
+    <li>
+        <a href="{% url 'subir_material_extra' item.curso.id %}">📁 Subir Material Extra</a>
+    </li>
 {% empty %}
     <p>No tienes cursos asignados.</p>
 {% endfor %}
