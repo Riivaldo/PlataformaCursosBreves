@@ -148,13 +148,14 @@ def progreso_estudiante(request):
         completados = progresos.filter(inscripcion=inscripcion, completado=True).count()
         total = recursos.count()
         porcentaje = (completados / total * 100) if total > 0 else 0
-        progreso_por_curso[inscripcion.curso] = {
+        progreso_por_curso[inscripcion.curso.id] = {
+            'curso': inscripcion.curso,
             'porcentaje': round(porcentaje, 2),
             'total': total,
             'completados': completados,
-            'recursos': recursos
+            'recursos': recursos,
+            'completados_ids': list(progresos.filter(inscripcion=inscripcion, completado=True).values_list('recurso_id', flat=True))
         }
-
     return render(request, 'cursos/progreso_estudiante.html', {
         'progreso_por_curso': progreso_por_curso
     })
@@ -189,4 +190,5 @@ def marcar_completado(request, recurso_id):
     progreso.save()
 
     return redirect('ver_recurso', recurso_id=recurso.id)
+
 

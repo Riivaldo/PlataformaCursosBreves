@@ -5,15 +5,18 @@
 {% comment %} # muesra el detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
 
 {% block content %}
-<h2>Subir Material Extra para el Curso: {{ curso.titulo }}</h2>
+<h2 class="centrado">Subir Material Extra para el Curso: {{ curso.titulo }}</h2>
+
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Subir Material</button>
+    <div class="btn-container">
+        <button type="submit">Subir Material</button>
+        <a href="{% url 'detalle_curso' curso.id %}"><button type="button">Cancelar</button></a>
+    </div>
 </form>
 
-<a href="{% url 'detalle_curso' curso.id %}"><button>Cancelar</button></a>
-
+<div class="material-extra">
 {% if material_extra %}
     <h3>Materiales Subidos:</h3>
     <ul>
@@ -27,4 +30,5 @@
 {% else %}
     <p>No hay material extra disponible para este curso.</p>
 {% endif %}
+</div>
 {% endblock %}
