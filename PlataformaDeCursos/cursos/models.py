@@ -55,8 +55,14 @@ class Progreso(models.Model):
 
  # Modelo para el material extra de los cursos
 class MaterialExtra(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)  # Relaciona el material extra con un curso
-    archivo = models.FileField(upload_to='materiales_extra/')
+    profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=100) 
     descripcion = models.TextField(blank=True)
+    archivo = models.FileField(upload_to='materiales/')
     fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titulo
+
+

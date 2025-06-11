@@ -1,8 +1,6 @@
 {% extends 'cursos/base.html' %}
 
-{% comment %} Espacio block para el titulo de la pagina {% endcomment %}
-
-{% block title %} Subir Material {% endblock %}
+{% block title %}Subir Material{% endblock %}
 
 {% comment %} # muesra el detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
 
@@ -13,17 +11,17 @@
     {{ form.as_p }}
     <button type="submit">Subir Material</button>
 </form>
+
 <a href="{% url 'detalle_curso' curso.id %}"><button>Cancelar</button></a>
+
 {% if material_extra %}
-    <h3>Material Extra Subido:</h3>
+    <h3>Materiales Subidos:</h3>
     <ul>
         {% for material in material_extra %}
             <li>
                 <a href="{{ material.archivo.url }}">{{ material.titulo }}</a>
                 (Subido por: {{ material.profesor.nombre }})
             </li>
-        {% empty %}
-            <li>No hay material extra disponible.</li>
         {% endfor %}
     </ul>
 {% else %}

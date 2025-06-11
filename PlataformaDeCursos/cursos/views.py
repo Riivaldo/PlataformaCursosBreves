@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Curso, Inscripcion, MaterialExtra, Recurso, Progreso
+from .models import Profesor, Curso, Inscripcion, MaterialExtra, Recurso, Progreso
 from .forms import InscripcionForm, RegistroUsuarioForm, MaterialExtraForm
 from .forms import InscripcionForm, RegistroUsuarioForm
 from django.http import HttpResponseForbidden
@@ -84,22 +84,39 @@ def inscribirse_curso(request, curso_id):
 # SUBIR UN MATERIAL EXTRA
 # requiriendo el loggin solo del maestro encargado de la materia
 
-@login_required
 def subir_material_extra(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    
     if request.method == 'POST':
         form = MaterialExtraForm(request.POST, request.FILES)
         if form.is_valid():
-            material_extra = form.save(commit=False)
-            material_extra.usuario = request.user
-            material_extra.curso_id = curso_id
-            material_extra.save()
-            return redirect('detalle_curso', curso_id=curso_id)
+            material = form.save(commit=False)
+            material.curso = curso
+            material.profesor = Profesor.objects.get(user=request.user)
+            material.save()
+
+            # 🔥 Crear Recurso automáticamente
+            Recurso.objects.create(
+                titulo=material.titulo,
+                descripcion=material.descripcion,
+                tipo_archivo="Archivo",
+                enlace=material.archivo.url,
+                curso=curso
+            )
+
+            return redirect('subir_material_extra', curso_id=curso.id)
     else:
         form = MaterialExtraForm()
-        
-    #Arreglando pequeño error en la urls
-    curso = get_object_or_404(Curso, id=curso_id)
-    return render(request, 'cursos/subir_material_extra.html', {'form': form, 'curso': curso})
+
+    material_extra = MaterialExtra.objects.filter(curso=curso)
+
+    return render(request, 'cursos/subir_material_extra.html', {
+        'curso': curso,
+        'form': form,
+        'material_extra': material_extra,
+    })
+
+
 
 
 #  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO (evitar al maestro) 
