@@ -12,7 +12,8 @@ class InscripcionForm(forms.ModelForm):
 class MaterialExtraForm(forms.ModelForm):
     class Meta:
         model = MaterialExtra
-        fields = ('archivo', 'descripcion')
+        fields = ('titulo', 'descripcion', 'archivo')
+
 # REGISTRO PARA QUE CUALQUIER USUARIIO PUEDA CREAR UNA CUENTA E INSCRIBIRSE A UN CURSO
 class RegistroUsuarioForm(UserCreationForm):
     email = forms.EmailField(required=True)

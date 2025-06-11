@@ -24,6 +24,8 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     # vista para la redireccion entre estudiante y maestro"
     path('redireccion/', login_redirect, name='login_redirect'),
+    # vista para perfil de usuario
+    path('perfil/', views.perfil_usuario, name='perfil_usuario'),
 ]
 
 

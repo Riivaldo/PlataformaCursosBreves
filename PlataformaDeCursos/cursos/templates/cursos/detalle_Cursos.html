@@ -8,10 +8,12 @@
 
 {% block content %}
     <h2>Detalles del Curso: {{ curso.titulo }}</h2>
-    <p><strong>Descripción:</strong> {{ curso.descripcion }}</p>
-    <p><strong>Profesor:</strong> {{ curso.profesor.nombre }}</p>
-    <p><strong>Fecha de inicio:</strong> {{ curso.fecha_inicio }}</p>
-    <p><strong>Fecha de fin:</strong> {{ curso.fecha_fin }}</p>
+    <div class="detalle">
+        <p><strong>Descripción:</strong> {{ curso.descripcion }}</p>
+        <p><strong>Profesor:</strong> {{ curso.profesor.nombre }}</p>
+        <p><strong>Fecha de inicio:</strong> {{ curso.fecha_inicio }}</p>
+        <p><strong>Fecha de fin:</strong> {{ curso.fecha_fin }}</p>
+    </div>
     <h3>Usuarios Inscritos:</h3>
     <ul>
         {% for inscripcion in inscripciones %}
