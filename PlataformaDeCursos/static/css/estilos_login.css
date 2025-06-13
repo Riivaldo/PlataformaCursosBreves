@@ -1,0 +1,170 @@
+/* Estilos del login (INICIAR SESION)*/
+.login-container {
+  width: 500px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #333;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form p {
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #444;
+}
+
+.login-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
+
+.login-form input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.btn-login {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  background-color: #0056b3;
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Estilos del login (REGISTRAR SESION)*/
+
+.envoltorio-formulario {
+  min-height: 100vh;
+  background-color: var(--color-primario);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.tarjeta-formulario {
+  background-color: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  width: 100%;
+  color: #333;
+  text-align: center;
+}
+
+.titulo-formulario {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-secundario);
+}
+
+.subtitulo-formulario {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formulario input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #333;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.formulario input:focus {
+  border-color: var(--color-secundario);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(73, 119, 218, 0.2);
+}
+
+.boton-formulario {
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-formulario:hover {
+  background-color: var(--color-hoverbtn);
+}
+
+.mensaje-secundario {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.mensaje-secundario a {
+  color: var(--color-secundario);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.mensaje-secundario a:hover {
+  text-decoration: underline;
+}
+

@@ -31,8 +31,16 @@ def dashboard(request):
 # Lista de los cursos en la pagina principal
 def lista_cursos(request):
     cursos = Curso.objects.all()
-    return render(request, 'cursos/cursos.html', {'cursos': cursos})
+    cursos_inscritos_ids = []
+    
+    # Verficia si el usuario ya se encuentra inscrito a la materia
+    if request.user.is_authenticated:
+        cursos_inscritos_ids = Inscripcion.objects.filter(user=request.user).values_list('curso_id', flat=True)
 
+    return render(request, 'cursos/cursos.html', {
+        'cursos': cursos,
+        'cursos_inscritos_ids': cursos_inscritos_ids
+    })
 
 # muesta a detalles las fehas de inicio y fin como tambien los usuarios inscritos en cada curso
 
@@ -60,7 +68,12 @@ def detalle_curso(request, curso_id):
 def inscribirse_curso(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
     user = request.user
-
+    
+    # Evita que un profesor se inscriba
+    if hasattr(request.user, 'profesor'):
+        messages.error(request, "Los profesores no pueden inscribirse en cursos.")
+        return redirect('lista_cursos')
+    
     if request.method == 'POST':
         form = InscripcionForm(request.POST)
         if form.is_valid():

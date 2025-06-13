@@ -2,14 +2,23 @@
 
 {% comment %} TEMPLATE PARA EL REGISTRO DE UN USUARIO POR DJANGO SI ES QUE NO EXISTE EN EL PANEL DE ADMIN DE DJANGO {% endcomment %}
 
-{% block title%} REGISTRO {% endblock%}
+{% block title %}Registro{% endblock %}
 
 {% block content %}
-  <h2>Registro de usuario</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Registrarse</button>
-  </form>
-  <p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+<div class="envoltorio-formulario">
+  <div class="tarjeta-formulario">
+    <h2 class="titulo-formulario">Crear cuenta</h2>
+    <p class="subtitulo-formulario">Por favor, completa tus datos</p>
+
+    <form method="post" class="formulario">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="boton-formulario">Registrarse</button>
+    </form>
+
+    <p class="mensaje-secundario">¿Ya tienes una cuenta? 
+      <a href="{% url 'login' %}">Inicia sesión aquí</a>
+    </p>
+  </div>
+</div>
 {% endblock %}
