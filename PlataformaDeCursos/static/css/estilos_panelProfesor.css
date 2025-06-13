@@ -1,0 +1,127 @@
+/*Estilos del panel de profesor (conflicto entre estilos_generales)*/
+/*se usos clases precisas para el conflicto*/
+.contenido-panel-profesor {
+  width: 1000px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.contenido-panel-profesor .titulo-principal {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.contenido-panel-profesor .card-curso {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contenido-panel-profesor .cabecera-curso {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contenido-panel-profesor .titulo-curso {
+  font-size: 1.5rem;
+  color: #34495e;
+}
+
+.contenido-panel-profesor .contador-estudiantes {
+  background-color: #ecf0f1;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.contenido-panel-profesor .descripcion-curso {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #7f8c8d;
+}
+
+.contenido-panel-profesor .tabla-container {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.contenido-panel-profesor .tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border: none; /* Override global tabla border */
+}
+
+.contenido-panel-profesor .tabla th,
+.contenido-panel-profesor .tabla td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  border: none; /* Prevent dotted borders */
+  color: #2c3e50;
+}
+
+.contenido-panel-profesor .tabla th {
+  color: #4977da;
+}
+
+.contenido-panel-profesor .barra-progreso {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  height: 20px;
+  width: 100%;
+}
+
+.contenido-panel-profesor .progreso {
+  background-color: #3498db;
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.contenido-panel-profesor .barra-progreso span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #fff;
+}
+
+.contenido-panel-profesor .btn-container {
+  text-align: right;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.contenido-panel-profesor .btn-subir {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #2ecc71;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.contenido-panel-profesor .btn-subir:hover {
+  background-color: #27ae60;
+}
+
+.contenido-panel-profesor .texto-inscrito {
+  text-align: center;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+  color: #7f8c8d;
+  padding: 0.5rem;
+  border-radius: 6px;
+}

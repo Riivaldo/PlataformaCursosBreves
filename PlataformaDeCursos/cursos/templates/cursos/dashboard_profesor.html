@@ -1,51 +1,67 @@
 {% extends 'cursos/base.html' %}
 
-{% block title %} Panel Profesor {% endblock %}
+{% block title %} Panel del Profesor {% endblock %}
 
 {% block content %}
-<h2 class="centrado">Panel del Profesor</h2>
+<div class="contenido-panel-profesor">
+  <h2 class="titulo-principal">Panel del Profesor</h2>
 
-{% for item in cursos_con_inscripciones %}
-    <h3>Curso: {{ item.curso.titulo }}</h3>
-    <p><strong>Descripción:</strong> {{ item.curso.descripcion }}</p>
+  {% for item in cursos_con_inscripciones %}
+    <div class="card-curso">
+      <div class="cabecera-curso">
+        <h3 class="titulo-curso">{{ item.curso.titulo }}</h3>
+        <span class="contador-estudiantes">
+          👥 {{ item.estudiantes|length }} inscritos
+        </span>
+      </div>
+      <p class="descripcion-curso">{{ item.curso.descripcion }}</p>
 
-    <h4>Estudiantes inscritos:</h4>
-    {% if item.estudiantes %}
-        <table border="1" cellpadding="5" cellspacing="0">
+      {% if item.estudiantes %}
+        <div class="tabla-container">
+          <table class="tabla">
             <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Progreso (%)</th>
-                    <th>Recursos completados</th>
-                </tr>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Progreso</th>
+                <th>Recursos</th>
+              </tr>
             </thead>
             <tbody>
-                {% for estudiante in item.estudiantes %}
-                    <tr>
-                        <td>
-                            {% if estudiante.inscripcion.user %}
-                                {{ estudiante.inscripcion.user.get_full_name|default:estudiante.inscripcion.user.username }}
-                            {% else %}
-                                {{ estudiante.inscripcion.nombre_estudiante }}
-                            {% endif %}
-                        </td>
-                        <td>{{ estudiante.inscripcion.email_estudiante }}</td>
-                        <td>{{ estudiante.progreso }}</td>
-                        <td>{{ estudiante.completados }} / {{ estudiante.total_recursos }}</td>
-                    </tr>
-                {% endfor %}
+              {% for estudiante in item.estudiantes %}
+                <tr>
+                  <td>
+                    {% if estudiante.inscripcion.user %}
+                      {{ estudiante.inscripcion.user.get_full_name|default:estudiante.inscripcion.user.username }}
+                    {% else %}
+                      {{ estudiante.inscripcion.nombre_estudiante }}
+                    {% endif %}
+                  </td>
+                  <td>{{ estudiante.inscripcion.email_estudiante }}</td>
+                  <td>
+                    <div class="barra-progreso">
+                      <div class="progreso" style="width: {{ estudiante.progreso }}%;"></div>
+                      <span>{{ estudiante.progreso }}%</span>
+                    </div>
+                  </td>
+                  <td>{{ estudiante.completados }} / {{ estudiante.total_recursos }}</td>
+                </tr>
+              {% endfor %}
             </tbody>
-        </table>
-    {% else %}
-        <p>No hay estudiantes inscritos.</p>
-    {% endif %}
-    <hr>
-    <li>
-        <a href="{% url 'subir_material_extra' item.curso.id %}">📁 Subir Material Extra</a>
-    </li>
-{% empty %}
-    <p>No tienes cursos asignados.</p>
-{% endfor %}
+          </table>
+        </div>
+      {% else %}
+        <p class="texto-inscrito">No hay estudiantes inscritos.</p>
+      {% endif %}
 
+      <div class="btn-container">
+        <a href="{% url 'subir_material_extra' item.curso.id %}" class="btn-subir">
+          📁 Subir Material Extra
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <p class="texto-inscrito">No tienes cursos asignados.</p>
+  {% endfor %}
+</div>
 {% endblock %}

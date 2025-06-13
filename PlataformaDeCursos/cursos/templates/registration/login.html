@@ -1,17 +1,17 @@
 {% extends 'cursos/base.html' %}
-{% comment %}  LOGGIN DEL USUARIO QUE YA EXISTE EN EL PANEL DE ADMIN DE DJANGO {% endcomment %}
 
+{% comment %}  LOGIN DEL USUARIO {% endcomment %}
 
-{% block title%} LOGIN {% endblock%}
+{% block title %}Iniciar sesión{% endblock %}
 
 {% block content %}
-  <h2>Iniciar sesión</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
-    
-  </form>
-    <p>¿No tienes cuenta?</p>
-   <a href="{% url 'registro_usuario' %}">Regístrate aquí</a>
+  <div class="login-container">
+    <h2>Iniciar sesión</h2>
+    <form method="post" class="login-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-login">Entrar</button>
+    </form>
+    <p class="text-center">¿No tienes cuenta? <a href="{% url 'registro_usuario' %}" class="link">Regístrate aquí</a></p>
+  </div>
 {% endblock %}
