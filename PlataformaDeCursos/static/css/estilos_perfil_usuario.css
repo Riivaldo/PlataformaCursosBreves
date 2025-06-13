@@ -125,6 +125,7 @@
 }
 
 .barra-progreso-llenado {
+  width: 0%;
   height: 100%;
   background: linear-gradient(to right, #4caf50, #81c784);
   position: relative;
@@ -132,12 +133,22 @@
 
 .barra-texto {
   position: absolute;
-  right: 10px;
+  white-space: nowrap;
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.8rem;
   color: white;
-  font-weight: bold;
+  font-weight: bold;  
+}
+.barra-texto.dentro {
+  color: white;
+  right: 10px;
+}
+
+.barra-texto.fuera {
+  color: #333;
+  left: 100%;
+  margin-left: 5px;
 }
 
 /* Botón de editar perfil */

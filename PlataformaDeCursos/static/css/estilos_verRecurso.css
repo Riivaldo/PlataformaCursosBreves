@@ -1,0 +1,84 @@
+.recurso-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.recurso-card {
+  background-color: #ffffff;
+  max-width: 600px;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.recurso-titulo {
+  font-size: 2rem;
+  color: var(--color-secundario);
+  margin-bottom: 1rem;
+}
+
+.recurso-descripcion {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.recurso-download {
+  display: inline-block;
+  background-color: var(--color-hoverbtn);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+.recurso-download:hover {
+  background-color: #429cd8;
+}
+
+.recurso-form {
+  margin: 1.5rem 0;
+}
+
+.estado-completado {
+  color: green;
+  font-weight: bold;
+  margin: 1.5rem 0;
+  background-color: #dbffe0;
+  padding: 0.8rem;
+  border-radius: 6px;
+}
+
+.recurso-botones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 500;
+}
+.btn:hover {
+  background-color: var(--color-hoverbtn);
+}
+.btn.secundario {
+  background-color: #ddd;
+  color: #333;
+}
+.btn.secundario:hover {
+  background-color: #bbb;
+}
