@@ -1,14 +1,11 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profesor, Curso, Inscripcion, MaterialExtra, Recurso, Progreso
-from .forms import InscripcionForm, RegistroUsuarioForm, MaterialExtraForm
-from .forms import InscripcionForm, RegistroUsuarioForm, EditarPerfilForm
-from django.http import HttpResponseForbidden
 from datetime import date
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect, render
+from .forms import EditarPerfilForm,InscripcionForm,MaterialExtraForm,PerfilForm,RegistroUsuarioForm
+from .models import Curso, Inscripcion, MaterialExtra, Perfil, Profesor, Progreso, Recurso
 
 # Create your views here.
 # Verifica si el usuario tiene asociado un profesor para inicio de Sesion y redirecciones
@@ -19,15 +16,6 @@ def login_redirect(request):
     else:
         return redirect('lista_cursos')
 
-@login_required
-def dashboard(request):
-    if hasattr(request.user, 'profesor'):
-        profesor = request.user.profesor
-        cursos = Curso.objects.filter(profesor=profesor)
-        return render(request, 'cursos/dashboard_profesor.html', {'cursos': cursos})
-    else:
-        return redirect('cursos/cursos.html') 
-    
 # Lista de los cursos en la pagina principal
 def lista_cursos(request):
     cursos = Curso.objects.all()
@@ -71,7 +59,7 @@ def inscribirse_curso(request, curso_id):
     
     # Evita que un profesor se inscriba
     if hasattr(request.user, 'profesor'):
-        messages.error(request, "Los profesores no pueden inscribirse en cursos.")
+        messages.error(request, "Los profesores no pueden inscribirse.")
         return redirect('lista_cursos')
     
     if request.method == 'POST':
@@ -85,6 +73,7 @@ def inscribirse_curso(request, curso_id):
                     'email_estudiante': form.cleaned_data['email_estudiante'],
                 }
             )
+            messages.success(request, '¡Te has inscrito correctamente al curso!')
             if not created:
                 # Si ya existe manda este mensaje de error
                 form.add_error(None, 'Ya estás inscrito en este curso.')
@@ -135,9 +124,6 @@ def subir_material_extra(request, curso_id):
         'form': form,
         'material_extra': material_extra,
     })
-
-
-
 
 #  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO (evitar al maestro) 
 def registro_usuario(request):
@@ -226,7 +212,7 @@ def darse_de_baja_curso(request, curso_id):
 
     if request.method == 'POST':
         inscripcion.delete()
-        messages.success(request, f"Te has dado de baja del curso '{curso.titulo}'.")
+        messages.error(request, f"Tu inscripción ha sido cancelada: {curso.titulo}.")
         return redirect('lista_cursos')
 
     return render(request, 'cursos/confirmar_baja.html', {'curso': curso})
@@ -270,26 +256,26 @@ def dashboard(request):
         return redirect('lista_cursos')
 
 # Funciones y vistas para el perfil de usuario (profesor y estudiante)
-    # Esto es para ver si el usuario es un profesor
+# Esto es para ver si el usuario es un profesor y valida
     
 def es_profesor(user):
     return hasattr(user, 'profesor')
 
 def perfil_usuario(request):
     user = request.user
-
-    if es_profesor(user):
-        
+    if es_profesor(user): 
         profesor = user.profesor
         cursos = Curso.objects.filter(profesor=profesor)
-
-        return render(request, 'cursos/perfil.html', {
+        perfil = Perfil.objects.filter(user=user).first()
+        
+        return render(request, 'cursos/perfil_profesor.html', {
             'es_profesor':True,
             'profesor': profesor,
+            'perfil': perfil,
             'cursos': cursos
         })
-
     else:
+        
         inscripciones = Inscripcion.objects.filter(user=user)
         cursos_info = []
         progresos = Progreso.objects.filter(inscripcion__in=inscripciones).select_related('recurso', 'inscripcion', 'inscripcion__curso')
@@ -300,7 +286,6 @@ def perfil_usuario(request):
                 p.recurso.id: p.completado
                 for p in Progreso.objects.filter(inscripcion=insc)
             }
-            
             materiales = []
             for recurso in recursos:
                 estado = 'completado' if progreso_dict.get(recurso.id) else 'incompleto'
@@ -309,7 +294,6 @@ def perfil_usuario(request):
                     'estado': estado,
                     'id':recurso.id
                 })
-                
             completados = progresos.filter(inscripcion=insc, completado=True).count()
             total = recursos.count()
 
@@ -319,23 +303,36 @@ def perfil_usuario(request):
                 'materiales': materiales,
                 'porcentaje':porcentaje,
             })
+        perfil = Perfil.objects.filter(user=user).first()
 
-        return render(request, 'cursos/perfil.html', {
+        return render(request, 'cursos/perfil_estudiante.html', {
             'es_profesor':False,
+            'perfil': perfil, #Enserio hay que poner al medio esta huevada, al medio unicamente funciona (creo)
             'cursos_info': cursos_info
         })
-    
+
+# Edicion de perfil, validando para ambos perfiles
 @login_required
 def editar_perfil(request):
+    user = request.user
+    perfil, _ = Perfil.objects.get_or_create(user=user)
     if request.method == 'POST':
-        form = EditarPerfilForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
+        user_form = EditarPerfilForm(request.POST, instance=user)
+        perfil_form = PerfilForm(request.POST, request.FILES, instance=perfil)
+        
+        if user_form.is_valid() and perfil_form.is_valid():
+            user_form.save()
+            perfil_form.save()
             messages.success(request, '¡Perfil del usuario actualizado correctamente!')
             return redirect('perfil_usuario')
     else:
-        form = EditarPerfilForm(instance=request.user)
-    return render(request, 'cursos/editar_perfil.html', {'form': form})
+        user_form = EditarPerfilForm(instance=user)
+        perfil_form = PerfilForm(instance=perfil)
+
+    return render(request, 'cursos/editar_perfil.html', {
+        'user_form': user_form,
+        'perfil_form': perfil_form
+    })
 
 @login_required
 def cambio_password(request):

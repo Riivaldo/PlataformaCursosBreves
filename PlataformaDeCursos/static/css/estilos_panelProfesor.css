@@ -16,6 +16,7 @@
 
 .contenido-panel-profesor .card-curso {
   background: #ffffff;
+  max-width: 1000px;
   border: 1px solid #ddd;
   border-radius: 12px;
   padding: 1.5rem;
@@ -64,7 +65,7 @@
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
-  border: none; /* Prevent dotted borders */
+  border: none;
   color: #2c3e50;
 }
 
@@ -124,4 +125,31 @@
   color: #7f8c8d;
   padding: 0.5rem;
   border-radius: 6px;
+}
+
+.barra-progreso_profesor {
+  height: 25px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  width: 180px;
+}
+
+.barra-progreso-llenado_profesor {
+  height: 100%;
+  background-color: #2385d4;
+  position: relative;
+  width: 0;
+  transition: none;
+}
+
+.barra-texto_profesor {
+  position: absolute;
+  white-space: nowrap;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: #222222;
+  font-weight: bold;  
 }

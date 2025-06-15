@@ -1,0 +1,169 @@
+/* ESTILO DED PERFIL DE PROFESOR*/
+.perfil-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 1000px;
+  margin: auto;
+  margin-bottom: 2rem;
+}
+
+.foto-perfil {
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+.foto-perfil img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-secundario);
+  margin-bottom: 1rem;
+}
+.upload-btn {
+  display: inline-block;
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: var(--color-hoverbtn);
+}
+
+.infoPerfil {
+  flex: 2 1 400px;
+}
+
+.infoPerfil h2 {
+  margin-bottom: 0.5rem;
+}
+
+.infoPerfil h3 {
+  margin: 0.4rem 0;
+  color: var(--color-secundario);
+}
+
+.infoPerfil p {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+.edit_btn {
+  margin-top: 1.5rem;
+}
+
+.btn_editar {
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn_editar:hover {
+  background-color: var(--color-hoverbtn);
+  cursor: pointer;
+}
+
+/*CURSOS IMPARTIDOS*/
+
+.perfilCursos-titulo {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  color: var(--color-secundario);
+}
+
+.perfilCursos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem auto;
+  max-width: 1000px;
+  padding: 0 1rem;
+}
+
+.curso-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-left: 5px solid var(--color-secundario);
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.curso-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.curso-info h5 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.curso-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.curso-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--color-secundario);
+}
+
+.detalle-btn {
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.detalle-btn:hover {
+  background-color: var(--color-hoverbtn);
+}
+
+/* Botón de edición de perfil */
+.perfil-editar-btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.btn-editar-perfil {
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar-perfil:hover {
+  background-color: var(--color-hoverbtn);
+  cursor: pointer;
+}

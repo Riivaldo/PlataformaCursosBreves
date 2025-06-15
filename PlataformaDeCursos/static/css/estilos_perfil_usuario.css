@@ -88,7 +88,7 @@
 .tarjetaMaterial h3 {
   margin-top: 0;
   font-size: 1.2rem;
-  color: #333;
+  color: #2c3e50;
 }
 
 .tarjetaMaterial ul {
@@ -114,10 +114,9 @@
 .tarjetaMaterial button:hover {
   background-color: #357ab7;
 }
-
 /* Barra de Progreso */
 .barra-progreso {
-  height: 20px;
+  height: 25px;
   background-color: #f0f0f0;
   border-radius: 10px;
   overflow: hidden;
@@ -137,7 +136,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.8rem;
-  color: white;
+  color: rgb(36, 32, 32);
   font-weight: bold;  
 }
 .barra-texto.dentro {

@@ -1,0 +1,119 @@
+.editar-perfil-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #a5d5f5;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.titulo-principal {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.subtitulo {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.3rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.form-help-text {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.form-error {
+  color: #b00020;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="file"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 5px rgba(59,130,246,0.5);
+}
+
+.botones-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+}
+
+.btn-guardar {
+  background-color: #2563eb; /* azul */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.btn-guardar:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-cancelar {
+  background-color: #e5e7eb; /* gris claro */
+  color: #333;
+  margin-left: 10px;
+}
+
+.btn-cancelar:hover {
+  background-color: #d1d5db;
+}
+
+.cambio-password-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.cambio-password-link a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.cambio-password-link a:hover {
+  text-decoration: underline;
+}

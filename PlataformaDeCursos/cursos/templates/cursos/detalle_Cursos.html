@@ -7,15 +7,19 @@
 {% comment %} # muesra eL detalle de los cursos como las fechas de inicio, fin, ademas de los usuarios inscritos a dicho curso {% endcomment %}
 
 {% block content %}
-    <h2>Detalles del Curso: {{ curso.titulo }}</h2>
-    <div class="detalle">
+<div class="curso-container">
+    <h2 class="curso-titulo">Detalles del Curso: {{ curso.titulo }}</h2>
+    
+    <div class="curso-detalle">
         <p><strong>Descripción:</strong> {{ curso.descripcion }}</p>
         <p><strong>Profesor:</strong> {{ curso.profesor.nombre }}</p>
         <p><strong>Fecha de inicio:</strong> {{ curso.fecha_inicio }}</p>
         <p><strong>Fecha de fin:</strong> {{ curso.fecha_fin }}</p>
     </div>
-    <h3>Usuarios Inscritos:</h3>
-    <ul>
+
+    <h3 class="curso-subtitulo">Usuarios Inscritos:</h3>
+    <p class="curso-inscritos-total">Total inscritos: {{ inscripciones|length }}</p>
+    <ul class="curso-lista-inscritos">
         {% for inscripcion in inscripciones %}
             <li>
                 {% if inscripcion.user %}
@@ -29,26 +33,31 @@
         {% endfor %}
     </ul>
 
-    {% if user.is_authenticated and not es_profesor %}
-        {% if not esta_inscrito %}
-            <form method="post" action="{% url 'inscribirse_curso' curso.id %}">
-                {% csrf_token %}
-                <button type="submit">Inscribirse</button>
-            </form>
+    <div class="curso-botones">
+        {% if es_profesor %}
+            <a href="{% url 'dashboard' %}"><button class="curso-btn">Volver</button></a>
         {% else %}
-            <a href="{% url 'darse_de_baja_curso' curso.id %}"><button>Darse de baja</button></a>
+            <a href="{% url 'lista_cursos' %}"><button class="curso-btn">Volver</button></a>
         {% endif %}
-    {% else %}
-        {% if not user.is_authenticated %}
-            <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para inscribirte.</p>
-        {% endif %}
-    {% endif %}
-    
-    {% comment %} Verificacion para profesor {% endcomment %}
-    {% if es_profesor %}
-        <a href="{% url 'dashboard' %}"><button>Volver</button></a>
-    {% else %}
-        <a href="{% url 'lista_cursos' %}"><button>Volver</button></a>
-    {% endif %}
+    </div>
 
+    <div class="curso-inscripcion">
+        {% if user.is_authenticated and not es_profesor %}
+            {% if not esta_inscrito %}
+                <form method="post" action="{% url 'inscribirse_curso' curso.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="curso-btn curso-btn-inscribirse">Inscribirme al curso</button>
+                </form>
+            {% else %}
+                <a href="{% url 'darse_de_baja_curso' curso.id %}">
+                    <button class="curso-btn curso-btn-cancelar">Cancelar inscripción</button>
+                </a>
+            {% endif %}
+        {% else %}
+            {% if not user.is_authenticated %}
+                <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para inscribirte.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
