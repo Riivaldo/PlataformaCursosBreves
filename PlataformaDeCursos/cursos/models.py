@@ -64,5 +64,15 @@ class MaterialExtra(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+# Modelo para un perfil mas profesional del profesor o estudiante
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='static/perfiles/', default='static/perfiles/perfil_defecto.jpg')
+    biografia = models.TextField(blank=True, null=True)
+    idioma_nativo = models.CharField(max_length=50, blank=True, null=True)
+    intereses = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
 

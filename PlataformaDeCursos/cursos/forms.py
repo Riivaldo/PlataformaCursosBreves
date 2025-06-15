@@ -1,8 +1,7 @@
 from django import forms
-from .models import Inscripcion , MaterialExtra
+from .models import Inscripcion , MaterialExtra, Perfil
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Inscripcion
 #   FORMULARIO PARA LA INSCRIPCION DE UN USUARIO A UN CURSO X
 class InscripcionForm(forms.ModelForm):
     class Meta:
@@ -22,6 +21,12 @@ class RegistroUsuarioForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2")
         
+# AGREGA UN PERFIL A CUALQUIER USUARIO REGISTRADO
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['imagen', 'biografia', 'idioma_nativo', 'intereses']
+
 #   EDITAR INFORMACION DEL USUARIO CAMPOS COMO NAME_USER Y EMAIL
 class EditarPerfilForm(forms.ModelForm):
     class Meta:

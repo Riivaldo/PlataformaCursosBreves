@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/estilos_generales.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_cursos.css' %}?v=1">
     <link rel="stylesheet" href="{% static 'css/estilos_barraNavegacion.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilos_perfil_usuario.css' %}">
     <link rel="stylesheet" href="{% static 'css/estilos_login.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilos_panelProfesor.css' %}">
     <link rel="stylesheet" href="{% static 'css/estilos_verRecurso.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_editarInformacion.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_panelProfesor.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_perfil_usuario.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_progresoEstudiante.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_detalleCurso.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_inscripcion.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos_perfilProfesor.css' %}">
     <title>{% block title %}Plataforma Cursos{% endblock %}</title>
   </head>
   <body>
@@ -19,9 +25,11 @@
         <nav class="nav-links">
           {% comment %} Redirige Inicio al panel de control si es profesor o listar cursos si es estudiante {% endcomment %}
           <a href=" {% if user.is_authenticated and user.profesor %}
-                      {% url 'dashboard' %}{% else %}{% url 'lista_cursos' %}
+                      {% url 'dashboard' %}
+                    {% else %}
+                      {% url 'lista_cursos' %}
                     {% endif %}">
-            📚 Inicio
+                    📚 Inicio
           </a>
           {% comment %} Ver listado de cursos si es profesor, el estudiante con el boton Inicio vee el listado {% endcomment %}
           {% if user.is_authenticated and user.profesor %}
@@ -33,7 +41,7 @@
           {% endif %}
   
           {% if user.is_authenticated %}
-            <a href="{% url 'perfil_usuario' %}">
+            <a href="{% url 'perfil_usuario' %}" class="perfil-usuario-enlace">
               <span class="welcome-text">👤 {{ user.username }}</span>
             </a>
             <form action="{% url 'logout' %}" method="post" class="logout-form">
