@@ -130,4 +130,6 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 # REDIRECCION AL INICIAR SESION
 LOGIN_REDIRECT_URL = '/redireccion/'
 
-
+# Archivos multimedia (subidas)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

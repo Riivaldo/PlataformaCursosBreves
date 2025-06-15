@@ -1,0 +1,132 @@
+/* ESTILO DE SUBIDA DE RECURSOS */
+.subir-material__contenedor {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    flex-wrap: wrap;
+}
+.subir-material__titulo {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1.8em;
+    color: #2c3e50;
+}
+
+.subir-material__form {
+    max-width: 600px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.subir-material__form-campos p {
+    margin-bottom: 15px;
+}
+
+.subir-material__form-campos label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.subir-material__form-campos input[type="text"],
+.subir-material__form-campos input[type="file"],
+.subir-material__form-campos textarea,
+.subir-material__form-campos select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 4px;
+    box-sizing: border-box;
+}
+
+.subir-material__botones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.btn--primario {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn--primario:hover {
+    background-color: #2980b9;
+}
+
+.btn--secundario {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn--secundario:hover {
+    background-color: #c0392b;
+}
+
+.subir-material__lista {
+    width: 370px;
+    max-width: 700px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.subir-material__subtitulo {
+    margin-bottom: 15px;
+    color: #2d3436;
+    font-size: 1.4em;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.subir-material__items {
+    list-style-type: none;
+    padding: 0;
+}
+
+.subir-material__item {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subir-material__link {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.subir-material__link:hover {
+    text-decoration: underline;
+}
+
+.subir-material__autor {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.subir-material__vacio {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
