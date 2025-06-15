@@ -144,26 +144,3 @@
 .detalle-btn:hover {
   background-color: var(--color-hoverbtn);
 }
-
-/* Botón de edición de perfil */
-.perfil-editar-btn {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-}
-
-.btn-editar-perfil {
-  background-color: var(--color-secundario);
-  color: var(--color-primario);
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
-}
-
-.btn-editar-perfil:hover {
-  background-color: var(--color-hoverbtn);
-  cursor: pointer;
-}

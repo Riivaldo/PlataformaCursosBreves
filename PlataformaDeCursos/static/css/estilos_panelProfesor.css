@@ -103,7 +103,15 @@
   display: flex;
   justify-content: center;
 }
-
+.btn-editar-perfil{
+  display: inline-block;
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 .contenido-panel-profesor .btn-subir {
   display: inline-block;
   padding: 0.6rem 1.2rem;

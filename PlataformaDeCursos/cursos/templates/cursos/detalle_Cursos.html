@@ -35,7 +35,8 @@
 
     <div class="curso-botones">
         {% if es_profesor %}
-            <a href="{% url 'dashboard' %}"><button class="curso-btn">Volver</button></a>
+            <a href="{% url 'dashboard' %}"><button class="curso-btn">📚 Inicio</button></a>
+            <a href="{% url 'perfil_usuario' %}"><button class="curso-btn">👤 Volver</button></a>
         {% else %}
             <a href="{% url 'lista_cursos' %}"><button class="curso-btn">Volver</button></a>
         {% endif %}

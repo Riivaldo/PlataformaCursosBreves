@@ -32,8 +32,8 @@
       <div class="curso-info">
         <h5>{{ curso.titulo }}</h5>
         <div class="curso-links">
-          <a href="{% url 'subir_material_extra' curso.id %}">Subir Material</a>
-          <a href="{% url 'dashboard' %}">
+          <a href="{% url 'subir_material_extra' curso.id %}">Ver Recursos</a>
+          <a href="{% url 'detalle_curso' curso.id %}">
             <button class="detalle-btn">Más Detalles</button>
           </a>
         </div>

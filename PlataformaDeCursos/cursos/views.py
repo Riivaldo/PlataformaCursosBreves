@@ -95,7 +95,6 @@ def inscribirse_curso(request, curso_id):
 
 def subir_material_extra(request, curso_id):
     curso = get_object_or_404(Curso, id=curso_id)
-    
     if request.method == 'POST':
         form = MaterialExtraForm(request.POST, request.FILES)
         if form.is_valid():
@@ -124,6 +123,25 @@ def subir_material_extra(request, curso_id):
         'form': form,
         'material_extra': material_extra,
     })
+    
+# Eliminar material extra
+@login_required
+def eliminar_material_extra(request, material_id):
+    material = get_object_or_404(MaterialExtra, id=material_id)
+
+    if material.profesor.user != request.user:
+        return HttpResponseForbidden("No tienes permiso para eliminar este material.")
+
+    curso_id = material.curso.id
+    
+    Recurso.objects.filter(titulo=material.titulo, curso=material.curso).delete()
+
+    material.archivo.delete()  # Borra el archivo en materiales
+    material.delete()  # Borra en la base de datos
+
+    messages.error(request, "Material eliminado correctamente.")
+    return redirect('subir_material_extra', curso_id=curso_id)
+
 
 #  VISTA PARA QUE CUALQUIER USUARIO SE PUEDA INSCRIBIR A UN CURSO (evitar al maestro) 
 def registro_usuario(request):

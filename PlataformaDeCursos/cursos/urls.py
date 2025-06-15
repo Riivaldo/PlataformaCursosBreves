@@ -32,6 +32,8 @@ urlpatterns = [
     path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
     # cambiar la contraseña del usuario
     path('cambiar-password/', views.cambio_password, name='cambio_password'),
+    # eliminar material_extra
+    path('material/<int:material_id>/eliminar/', views.eliminar_material_extra, name='eliminar_material_extra'),
 ]
 
 

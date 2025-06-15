@@ -8,14 +8,14 @@
     <h1 class="recurso-titulo">{{ recurso.titulo }}</h1>
     <p class="recurso-descripcion">{{ recurso.descripcion }}</p>
 
-    {% if recurso.archivo %}
-      <a href="{{ recurso.archivo.url }}" download class="recurso-download">📎 Descargar archivo</a>
+    {% if recurso.enlace %}
+      <a href="{{ recurso.enlace }}" target="_blank" class="recurso-download" id="abrirEnlace">🌐 Abrir enlace</a>
     {% endif %}
 
     {% if not completado %}
       <form method="post" action="{% url 'marcar_completado' recurso.id %}" class="recurso-form">
         {% csrf_token %}
-        <button type="submit" class="btn completar-btn">✅ Marcar como completado</button>
+        <button type="submit" class="btn completar-btn" id="btnCompletar" disabled>✅ Marcar como completado (abre enlace)</button>
       </form>
     {% else %}
       <p class="estado-completado">✔️ Recurso ya completado</p>
@@ -27,4 +27,18 @@
     </div>
   </div>
 </div>
+{% comment %} Pequeña verificacion si ya vio el archivo {% endcomment %}
+{% if recurso.enlace %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const link = document.getElementById("abrirEnlace");
+    const boton = document.getElementById("btnCompletar");
+
+    link.addEventListener("click", function () {
+      boton.disabled = false;
+      boton.textContent = "✅ Marcar como completado ";
+    });
+  });
+</script>
+{% endif %}
 {% endblock %}
