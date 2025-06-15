@@ -58,26 +58,24 @@
   margin-bottom: 30px;
   margin-left: 15px;
 }
-.perfilCursos{
+.perfilCursos_est { 
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: start;
+  justify-content: center;
   padding: 1rem 3rem;
   border: 2px solid #DEDEDE;
 }
-.perfilCursos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
 
 .tarjetaMaterial {
-  background: #f5f7fa;
+  background-color: #e8f8f5;
+  box-shadow: 0 0 5px var(--color-secundario),
+  0 0 5px var(--color-secundario),
+  0 0 5px var(--color-secundario);
   padding: 15px;
+  margin: 20px 50px;
   border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 2px solid transparent;
   width: 300px;
   transition: transform 0.2s ease;
 }
