@@ -168,3 +168,16 @@
   text-decoration: underline;
 }
 
+/* Diseño resposivo, pequeña solucion */
+@media (max-width: 530px) {
+  .login-container {
+    width: 80%;
+  }
+  .perfil-derecha{
+    width: 100%;
+  }
+  .tarjetaMaterial{
+    margin: 0 !important;
+  }
+}
+/*--------*/

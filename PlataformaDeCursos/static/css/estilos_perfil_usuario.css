@@ -1,6 +1,7 @@
 /* PERFIL DE USUARIO */
 .perfil-layout {
   display: flex;
+  justify-content: center;
   gap: 40px;
   align-items: flex-start;
   padding: 20px;
@@ -57,6 +58,7 @@
   text-align: center;
   margin-bottom: 30px;
   margin-left: 15px;
+  flex: 2 1 100px !important;
 }
 .perfilCursos_est { 
   display: flex;
