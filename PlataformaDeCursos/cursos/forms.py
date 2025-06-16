@@ -35,5 +35,4 @@ class EditarPerfilForm(forms.ModelForm):
         labels = {
             'username': 'Nombre de usuario',
             'email': 'Correo electrónico',
-            
         }

@@ -5,12 +5,13 @@
 
 {% block content %}
 <div class="perfil-container">
-  <div class="foto-perfil">
-    <img id="preview-img" src="{% static 'perfiles/perfil_defecto.png' %}" alt="Foto de perfil">
-    <label for="upload-input" class="upload-btn">Subir Imagen</label>
-    <input type="file" id="upload-input" accept="image/*" style="display: none;">
+  <div class="foto-perfil" style="text-align:center;">
+    {% if perfil.imagen %}
+      <img src="{{ perfil.imagen.url }}" alt="Foto de perfil">
+    {% else %}
+      <img src="{% static 'perfiles/perfil_defecto.png' %}" alt="Foto de perfil">
+    {% endif %}
   </div>
-  
   <div class="infoPerfil">
     <h2>Perfil de {{ user.username }}</h2>
     <h3>Profesor: {{ profesor.nombre }}</h3>
@@ -43,22 +44,4 @@
     <p>No estás impartiendo ningún curso actualmente.</p>
   {% endfor %}
 </div>
-
-
-
-<script>
-  const input = document.getElementById('upload-input');
-  const img = document.getElementById('preview-img');
-
-  input.addEventListener('change', function () {
-    const file = input.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        img.src = e.target.result;
-      }
-      reader.readAsDataURL(file);
-    }
-  });
-</script>
 {% endblock %}

@@ -5,8 +5,17 @@
 {% block content %}
 <div class="editar-perfil-container" style="max-width: 500px; margin: 2rem auto; background: #a5d5f5; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 2rem;">
     <h2 style="text-align:center; margin-bottom: 1.5rem;">Editar mi perfil</h2>
+
+    {% if perfil_form.instance.imagen and perfil_form.instance.imagen.url %}
+      <div style="text-align:center; margin-bottom: 1rem;">
+        <p>Imagen actual:</p>
+        <img src="{{ perfil_form.instance.imagen.url }}" alt="Foto de perfil" style="max-width: 150px; border-radius: 50%;">
+      </div>
+    {% endif %}
+
     <form method="post" enctype="multipart/form-data" class="form-editar-perfil">
         {% csrf_token %}
+
         <h3 style="margin-bottom: 1rem;">Información básica</h3>
         {% for field in user_form %}
           <div class="form-group">
@@ -20,7 +29,6 @@
             {% endfor %}
           </div>
         {% endfor %}
-
 
         <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Información profesional</h3>
         {% for field in perfil_form %}
@@ -40,6 +48,7 @@
             <button type="submit" class="btn_editar">Guardar cambios</button>
             <a href="{% url 'perfil_usuario' %}" class="btn_editar" style="background:#ccc; color:#333; margin-left:10px;">Cancelar</a>
         </div>
+
         <div style="text-align:center; margin-top: 1rem;">
             <a href="{% url 'cambio_password' %}">Cambiar contraseña</a>
         </div>

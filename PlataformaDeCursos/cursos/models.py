@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
   #  ---- MODELOS DE LA APLICACION ----
@@ -68,11 +69,17 @@ class MaterialExtra(models.Model):
 # Modelo para un perfil mas profesional del profesor o estudiante
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    imagen = models.ImageField(upload_to='static/perfiles/', default='static/perfiles/perfil_defecto.jpg')
+    imagen = models.ImageField(upload_to='perfiles/', default='perfiles/perfil_defecto.jpg', blank=True, null=True)
     biografia = models.TextField(blank=True, null=True)
     idioma_nativo = models.CharField(max_length=50, blank=True, null=True)
     intereses = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Perfil de {self.user.username}"
-
+    
+    # Retorna la url de la imagen por defecto
+    @property
+    def imagen_url(self):
+        if self.imagen and hasattr(self.imagen, 'url'):
+            return self.imagen.url
+        return settings.MEDIA_URL + 'perfiles/perfil_defecto.jpg'

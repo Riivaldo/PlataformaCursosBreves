@@ -111,7 +111,7 @@ def subir_material_extra(request, curso_id):
                 enlace=material.archivo.url,
                 curso=curso
             )
-
+            messages.success(request, "Material subido exitosamente.")
             return redirect('subir_material_extra', curso_id=curso.id)
     else:
         form = MaterialExtraForm()
