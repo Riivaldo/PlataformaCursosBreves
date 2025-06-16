@@ -7,8 +7,12 @@
 <div class="perfil-container">
   <div class="foto-perfil">
     <img id="preview-img" src="{% static 'perfiles/perfil_defecto.png' %}" alt="Foto de perfil">
-    <label for="upload-input" class="upload-btn">Subir Imagen</label>
     <input type="file" id="upload-input" accept="image/*" style="display: none;">
+    <div class="perfil-editar-btn">
+      <a href="{% url 'editar_perfil' %}">
+        <button class="btn-editar-perfil">Editar información</button>
+      </a>
+    </div>
   </div>
   
   <div class="infoPerfil">
@@ -18,11 +22,6 @@
     <p><strong>Biografía:</strong> {{ perfil.biografia|default:"No proporcionada." }}</p>
     <p><strong>Idioma Nativo:</strong> {{ perfil.idioma_nativo|default:"No especificado." }}</p>
     <p><strong>Intereses:</strong> {{ perfil.intereses|default:"No especificados." }}</p>
-  </div>
-  <div class="perfil-editar-btn">
-    <a href="{% url 'editar_perfil' %}">
-      <button class="btn-editar-perfil">Editar información</button>
-    </a>
   </div>
 </div>
 <h4 class="perfilCursos-titulo">Cursos que imparte:</h4>
@@ -43,8 +42,6 @@
     <p>No estás impartiendo ningún curso actualmente.</p>
   {% endfor %}
 </div>
-
-
 
 <script>
   const input = document.getElementById('upload-input');
