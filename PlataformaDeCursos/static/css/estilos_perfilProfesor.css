@@ -42,7 +42,7 @@
 }
 
 .infoPerfil {
-  flex: 2 1 400px;
+  flex: 2 1 100px !important;
 }
 
 .infoPerfil h2 {
@@ -95,6 +95,7 @@
   margin: 2rem auto;
   max-width: 1000px;
   padding: 0 1rem;
+  width: 100%;
 }
 
 .curso-card {

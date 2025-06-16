@@ -1,7 +1,7 @@
 /*Estilos del panel de profesor (conflicto entre estilos_generales)*/
 /*se usos clases precisas para el conflicto*/
 .contenido-panel-profesor {
-  width: 1000px;
+  width: 100%;
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;

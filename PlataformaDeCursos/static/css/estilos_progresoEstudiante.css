@@ -121,3 +121,10 @@ body {
 .volver-btn button:hover {
     background-color: #303f9f;
 }
+/* Diseño resposivo, pequeña solucion */
+@media (max-width: 530px) {
+    .card-curso {
+        max-width: 0;
+    }
+}
+/*--------*/
