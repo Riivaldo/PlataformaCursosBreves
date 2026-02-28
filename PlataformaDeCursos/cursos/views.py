@@ -103,7 +103,7 @@ def subir_material_extra(request, curso_id):
             material.profesor = Profesor.objects.get(user=request.user)
             material.save()
 
-            # 🔥 Crear Recurso automáticamente
+            # Crear Recurso automáticamente
             Recurso.objects.create(
                 titulo=material.titulo,
                 descripcion=material.descripcion,
