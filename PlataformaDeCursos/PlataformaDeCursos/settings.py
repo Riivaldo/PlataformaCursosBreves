@@ -41,12 +41,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # <--- Justo aquí
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # ...
-]
 ]
 
 ROOT_URLCONF = 'PlataformaDeCursos.urls'
